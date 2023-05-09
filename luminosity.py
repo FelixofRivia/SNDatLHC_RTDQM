@@ -1,4 +1,5 @@
 from ROOT import TH1D, TCanvas, TFile, gDirectory, gSystem
+import ROOT
 import header as h
 import tasks as task
 import ratePlots as r
@@ -59,7 +60,7 @@ def cb_LumiAlice(LumiDel,LumiRec):
 
 def main():
     #sys.stdout = open(os.devnull, "w")
-    sys.stderr = open(os.devnull, "w")
+    #sys.stderr = open(os.devnull, "w")  #do not print errors
     global LumiAtlas, AtlasTime,LumiAlice,AliceTime,IsAtlas
     if not pydim.dis_get_dns_node():
         print("No Dim DNS node found. Please set the environment variable DIM_DNS_NODE", flush=True)
@@ -78,8 +79,7 @@ def main():
         
     # Wait for updates
     while plotLumi:
-        nshow = 10 #saving every tot seconds
-        hLumi = TH1D("hLumi","Atlas Instant Lumi",h.timeRange/h.lumiBinWidth,0,h.timeRange)
+        hLumi = TH1D("hLumi","Atlas Instant Lumi",int(h.timeRange/h.lumiBinWidth),0,h.timeRange)
         LumiCanvas = TCanvas("LumiCanvas","LumiRate",600,1200)
         LumiCanvas.Divide(1,2)
         AtlasTime = 0
