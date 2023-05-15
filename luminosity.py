@@ -40,7 +40,6 @@ def cb_BeamMode(now,fill):
     print("Beam Mode - ",BeamMode)
     if "STABLE BEAMS" in BeamMode:
         plotLumi = True
-    print(plotLumi)
 
 
 def cb_StatusAtlas(now,status):

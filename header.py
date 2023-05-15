@@ -41,14 +41,6 @@ filename = '/home/sndmon/Snd/Data/run_004208/data_0001.root'
 file = TFile()
 myDir = gDirectory.Get('data')
 
-#Tree data
-# tmstp = 0
-# nhits = 0
-# boards = []
-# tofId = []
-# tofCh = []    
-
-
 totName = []
 totPName = []
 totSlot = []

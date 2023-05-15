@@ -12,6 +12,7 @@ import header as h
 import tasks as task
 import ratePlots as r
 import hitPlots as hit
+import hitMaps as map
 import luminosity as lum
 import reader as read
 
@@ -112,13 +113,18 @@ def callSciFiCh():
 def callSciFi60Ch():
     hit.plotHitsChannel("SciFi",60)
 
+def callHitMap():
+    map.plot2DMap(41,41,[0,1,6,7],[2,3],"hitmap",1,1)
+
 usCh = threading.Thread(target=callUSCh)
 sciFiCh = threading.Thread(target=callSciFiCh)
 #sciFi60Ch = threading.Thread(target=callSciFi60Ch)
+hitMap = threading.Thread(target=callHitMap)
 
 #usCh.start()
 # sciFiCh.start()
 #sciFi60Ch.start()
+hitMap.start()
 
 def callDetectorRateSciFi():
     r.plotDetectorRate("Scifi",h.sciFiId[0][0])
@@ -148,18 +154,18 @@ reader.start()
 
 #start threads
 
-#print(h.sciFiId)
-# print(h.vetoName)
-# print(h.vetoPName)
-# print(h.vetoSlot)
+print(h.sciFiId)
+print(h.vetoName)
+print(h.vetoPName)
+print(h.vetoSlot)
 
-rateVeto.start()
+#rateVeto.start()
 #rateUS1.start()
 #rateUS2.start()
 #rateUS3.start()
 #rateDS.start()
 #hitsDS.start()
-#hitsUS.start()
+hitsUS.start()
 #hitsTot.start()
 #hitsSciFi.start()
 #vetoCh.start()

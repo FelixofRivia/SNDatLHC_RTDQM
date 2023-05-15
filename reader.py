@@ -45,10 +45,10 @@ def readEntry():
 
 def avoidOverlap(i,iNext):
     #while sharing a value with rate or another thread
-    while(i > h.i):
+    while(i > h.i):   #i > h.i
         #print(f"tried to grab val, waiting...\i = {i}",flush=True)
         #print(h.iArr,flush=True)
-        t.sleep(1)
+        t.sleep(3)
         
         
 # def avoidOverlap(i,iNext):
