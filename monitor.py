@@ -1,4 +1,4 @@
-from ROOT import TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TGraph
+from ROOT import TH1, TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TGraph
 from array import array
 import numpy as np
 from ROOT import THttpServer
@@ -45,9 +45,19 @@ print(f"opening file first time: {h.filename}",flush=True)
 task.setBeamParam(beammode)
 
 #settings for number of events to run
+# task.reopenFile()
+# h.myDir = gDirectory.Get('data')
+#print("testtt", flush=True)
+
+#avoid segmentation violation when closing file
+#TH1.AddDirectory(False)
 
 #run through all the events (best for complete files)
 task.updateAllEvents()
+# task.reopenFile()
+# h.myDir = gDirectory.Get('data')
+# print("testtt", flush=True)
+
 #h.plotWholeRate = True
 
 #start from the event arg1 seconds ago, until h.timeRange
@@ -124,7 +134,7 @@ hitMap = threading.Thread(target=callHitMap)
 #usCh.start()
 # sciFiCh.start()
 #sciFi60Ch.start()
-hitMap.start()
+#hitMap.start()
 
 def callDetectorRateSciFi():
     r.plotDetectorRate("Scifi",h.sciFiId[0][0])
@@ -154,18 +164,18 @@ reader.start()
 
 #start threads
 
-print(h.sciFiId)
-print(h.vetoName)
-print(h.vetoPName)
-print(h.vetoSlot)
+# print(h.sciFiId)
+# print(h.vetoName)
+# print(h.vetoPName)
+# print(h.vetoSlot)
 
 #rateVeto.start()
 #rateUS1.start()
 #rateUS2.start()
-#rateUS3.start()
+rateUS3.start()
 #rateDS.start()
 #hitsDS.start()
-hitsUS.start()
+#hitsUS.start()
 #hitsTot.start()
 #hitsSciFi.start()
 #vetoCh.start()

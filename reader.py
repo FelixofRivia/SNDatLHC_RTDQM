@@ -4,8 +4,13 @@ import ROOT
 import header as h
 import tasks as task
 import numpy as np
+import sys
+import os
 
 def readEntry():
+    #sys.stderr = open(os.devnull, "w")  #do not print errors
+    while(h.updatingFile):
+        t.sleep(10)
     h.myDir = gDirectory.Get('data')
     i = h.eventStart
     h.iRead = i
@@ -29,8 +34,18 @@ def readEntry():
                 while (h.readingTree):
                     t.sleep(0.05)
                 h.readingTree=True
-                h.myDir.Refresh()
-                h.file.ReadKeys()
+                reopen = True
+                while (reopen):
+                    task.reopenFile()
+                    try:
+                        h.myDir = gDirectory.Get('data')
+                        reopen = False
+                    except:
+                        print("Failed to update file ... trying again", flush = True)
+                        t.sleep(5)
+                print("opened",flush=True)
+                # h.myDir.Refresh()
+                # h.file.ReadKeys()
                 h.readingTree=False
                 #gDirectory.ReadKeys()
 

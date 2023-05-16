@@ -6,7 +6,7 @@ import ROOT
 import json
 
 def reopenFile():
-    print("board is waiting. Updating file...")
+    print("Reopen file", flush=True)
     h.file.Close()
     h.file = ROOT.TFile.Open(h.filename,'r')
 
@@ -122,9 +122,18 @@ def updateTimeRange(secAgoStart,secAgoEnd):
 def updateAllEvents():
     #get first and last event
     print(f"file = {h.filename}")
-    #reopenFile()
-    h.myDir = gDirectory.Get('data') 
-    h.eventEnd = h.myDir.GetEntriesFast() - 1
+    # reopenFile()
+    # print("laaaaaa", flush=True)
+    h.updatingFile = True
+    while(h.updatingFile):
+        h.myDir = gDirectory.Get('data')
+        try: 
+            h.eventEnd = h.myDir.GetEntriesFast() - 1
+            h.updatingFile = False
+        except:
+            print("Tree is not ready, waiting...", flush=True)
+            t.sleep(10)
+            reopenFile()
     h.eventStart = 0
     var = h.myDir.GetEntry(h.eventStart)
     h.t0 = h.myDir.evt_timestamp
