@@ -5,6 +5,7 @@ import array
 import time as t
 import header as h
 import reader as read
+import tasks as task
 
 def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,canvasIndex):
 
@@ -15,8 +16,8 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
     eventEnd = h.eventEnd
 
     #grab their channels
-    xBins = 512 #64*8, but can be done better (select only needed channels, as in boardrate)
-    yBins = 512
+    xBins = 64*len(xtofIDs)#512 #64*8, but can be done better (select only needed channels, as in boardrate)
+    yBins = 64*len(ytofIDs)
     #make 2Dhist assigned with channels
     hitMap = TH2D(str(canvasName) + "HitsPerChannel" + str(canvasIndex),str(canvasName) + " nHits per channel",xBins,0,xBins,yBins,0,yBins)
     
@@ -44,6 +45,8 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
             canvas.Draw()
             canvas.Modified()
             canvas.Update()
+            # save on root file
+            task.wrtcanvas(canvas, f"{canvasName}_2D_hitmap.png")
 
             if i == 999999:
                 print("event = 999999. End of file.",flush=True)
@@ -60,7 +63,8 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
             canvas.Draw()
             canvas.Modified()
             canvas.Update()
-
+            # save on root file
+            task.wrtcanvas(canvas, f"{canvasName}_2D_hitmap.png")
         # #initialize plot     to map bin with specific values
         # if i == h.eventStart:
         #     for b in range(len(boardId)):
@@ -106,14 +110,27 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
 
         xch=[]
         ych=[]
-        # check if both boards are hit
+        # check if both boards are hit   real channels
+        # if (xBoardNumber in boardArr) and (yBoardNumber in boardArr):
+        #     for b in range(0,len(boardArr)):
+        #         if xBoardNumber==boardArr[b] and tofID[b] in xtofIDs:
+        #             xch.append(64*tofID[b] + tofChannel[b])
+        #         if yBoardNumber==boardArr[b] and tofID[b] in ytofIDs:
+        #             ych.append(64*tofID[b] + tofChannel[b])
+
+        # check if both boards are hit  regrouped channels
         if (xBoardNumber in boardArr) and (yBoardNumber in boardArr):
             for b in range(0,len(boardArr)):
                 if xBoardNumber==boardArr[b] and tofID[b] in xtofIDs:
-                    xch.append(64*tofID[b] + tofChannel[b])
+                    try:
+                        xch.append(64*xtofIDs.index(tofID[b]) + tofChannel[b])
+                    except:
+                        print("Ch not found in 2Dmaps...ignoring",flush=True)
                 if yBoardNumber==boardArr[b] and tofID[b] in ytofIDs:
-                    ych.append(64*tofID[b] + tofChannel[b])
-
+                    try:
+                        ych.append(64*ytofIDs.index(tofID[b]) + tofChannel[b])
+                    except:
+                        print("Ch not found in 2Dmaps...ignoring",flush=True)
         # fill every combination
         if len(xch)>0 and len(ych)>0:
             for x in xch:

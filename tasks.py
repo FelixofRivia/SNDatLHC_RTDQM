@@ -5,6 +5,16 @@ import time as t
 import ROOT
 import json
 
+
+def wrtcanvas(canv, name):
+    while (h.writingFile):
+        t.sleep(0.1)
+    h.writingFile = True
+    h.wrtfile = ROOT.TFile.Open(h.wrtfilename,'UPDATE')
+    h.wrtfile.WriteObject(canv, name, "overwrite")
+    h.wrtfile.Close()
+    h.writingFile = False
+
 def reopenFile():
     print("Reopen file", flush=True)
     h.file.Close()

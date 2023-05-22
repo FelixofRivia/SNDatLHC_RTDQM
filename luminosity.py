@@ -104,6 +104,8 @@ def main():
                 rate.Draw()
                 LumiCanvas.Modified()
                 LumiCanvas.Update()
+                # save on root file
+                task.wrtcanvas(LumiCanvas, "LumiCanvas.png")
 
 #if __name__=="__main__":
 #    #global LumiAtlas, AtlasTime,LumiAlice,AliceTime,IsAtlas

@@ -11,6 +11,7 @@ nEvents = eventEnd - eventStart
 t0 = 0
 updatingFile = False
 readingTree = False
+writingFile = False
 iArr = []
 i = 0
 iRead = 0
@@ -39,6 +40,8 @@ isSetRange = False #do not try to get new events
 #initialize a file
 filename = '/home/sndmon/Snd/Data/run_004208/data_0001.root'
 file = TFile()
+wrtfilename = "graphs.root"
+wrtfile = TFile()
 myDir = gDirectory.Get('data')
 
 totName = []

@@ -39,6 +39,11 @@ h.filename = f"root://snd-server-1:1094///mnt/raid1/data_online/run_{runNumber}/
 
 #home/sndmon/Snd/Data/run_00' + args.runNumber + '/data_000' + args.dataNumber + '.root'
 #file = TFile(filename,'r')
+
+h.wrtfile = ROOT.TFile.Open(h.wrtfilename, "RECREATE")
+print(f"creating write file: {h.wrtfilename}",flush=True)
+h.wrtfile.Close()
+
 h.file = ROOT.TFile.Open(h.filename,'r')
 print(f"opening file first time: {h.filename}",flush=True)
 
@@ -134,7 +139,7 @@ hitMap = threading.Thread(target=callHitMap)
 #usCh.start()
 # sciFiCh.start()
 #sciFi60Ch.start()
-#hitMap.start()
+hitMap.start()
 
 def callDetectorRateSciFi():
     r.plotDetectorRate("Scifi",h.sciFiId[0][0])
@@ -172,10 +177,10 @@ reader.start()
 #rateVeto.start()
 #rateUS1.start()
 #rateUS2.start()
-rateUS3.start()
+#rateUS3.start()
 #rateDS.start()
-#hitsDS.start()
-#hitsUS.start()
+hitsDS.start()
+hitsUS.start()
 #hitsTot.start()
 #hitsSciFi.start()
 #vetoCh.start()
@@ -186,7 +191,7 @@ rateUS3.start()
 #if args.beammode == 'STABLE':
 print(f"Start Lumi = {h.updateIndex}",flush=True)
 lumi = threading.Thread(target=callLumi)
-lumi.start()
+#lumi.start()
 
 print(f"update = {h.updateIndex}",flush=True)
 #rate should ALWAYS be running!

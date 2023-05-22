@@ -60,6 +60,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
+            # save on root file
+            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
                 print("event = 999999. End of file.",flush=True)
@@ -78,6 +80,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
+            # save on root file
+            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
 
         # wait for reader 
@@ -171,12 +175,16 @@ def plotHitsChannel(canvasName,boardNumber):
             hHitsPerChannel.Draw("bar hist")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
+            # save on root file
+            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
         if(i >= eventEnd):
             #update
             hHitsPerChannel.Draw("bar hist")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
+            # save on root file
+            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
                 print("event = 999999. End of file.",flush=True)
@@ -287,6 +295,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
             hHitsPerBoard.Draw("bar hist") 
             hits_per_board.Modified()
             hits_per_board.Update()
+            # save on root file
+            task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
 
             if i == 999999:
                 print("event = 999999. End of file.",flush=True)
@@ -308,6 +318,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
             hHitsPerBoard.Draw("bar hist") 
             hits_per_board.Modified()
             hits_per_board.Update()
+            # save on root file
+            task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
 
         #initialize plot
         if i == h.eventStart:

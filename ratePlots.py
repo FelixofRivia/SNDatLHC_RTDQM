@@ -53,6 +53,8 @@ def plotGlobalRate():
             hRateNorm.Draw("e")
             globalRate.Modified()
             globalRate.Update()
+            # save on root file
+            task.wrtcanvas(globalRate, "globalRate.png")
 
         #if run out of events, wait and reopen file. Refresh final event
         if(h.i >= h.eventEnd):
@@ -63,6 +65,8 @@ def plotGlobalRate():
             hRateNorm.Draw("e")
             globalRate.Modified()
             globalRate.Update()
+            # save on root file
+            task.wrtcanvas(globalRate, "globalRate.png")
             #if end of file, print out and end thread
             if h.i == 999999:
                 print("event = 999999. End of file.")
@@ -178,6 +182,8 @@ def plotBoardRate(canvasName,boardNumber):
             hBoardRateNorm.Draw("e")
             boardRate.Modified()
             boardRate.Update()
+            # save on root file
+            task.wrtcanvas(boardRate, f"{canvasName}Rate.png")
 
         #if end of events in file
         if(i >= h.eventEnd):
@@ -187,6 +193,8 @@ def plotBoardRate(canvasName,boardNumber):
             hBoardRateNorm.Draw("e")
             boardRate.Modified()
             boardRate.Update()
+            # save on root file
+            task.wrtcanvas(boardRate, f"{canvasName}Rate.png")
 
             #if end of file, exit
             if i == 999999:
