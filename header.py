@@ -12,6 +12,7 @@ t0 = 0
 updatingFile = False
 readingTree = False
 writingFile = False
+waitingEnd = True
 iArr = []
 i = 0
 iRead = 0
@@ -43,6 +44,8 @@ file = TFile()
 wrtfilename = "graphs.root"
 wrtfile = TFile()
 myDir = gDirectory.Get('data')
+fileN = 0
+runN = 0
 
 totName = []
 totPName = []

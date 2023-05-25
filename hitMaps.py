@@ -49,8 +49,10 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
             task.wrtcanvas(canvas, f"{canvasName}_2D_hitmap.png")
 
             if i == 999999:
-                print("event = 999999. End of file.",flush=True)
-                exit()
+                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")

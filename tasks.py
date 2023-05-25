@@ -5,6 +5,12 @@ import time as t
 import ROOT
 import json
 
+def updateFileNumber():    # for online data only
+    h.fileN += 1
+    fileNumber = str(h.fileN).rjust(4,"0")
+    runNumber = str(h.runN).rjust(6,"0")
+    h.filename = f"root://snd-server-1:1094///mnt/raid1/data_online/run_{runNumber}/data_{fileNumber}.root"
+    print(f"New file name: {h.filename}", flush=True)
 
 def wrtcanvas(canv, name):
     while (h.writingFile):
@@ -132,8 +138,6 @@ def updateTimeRange(secAgoStart,secAgoEnd):
 def updateAllEvents():
     #get first and last event
     print(f"file = {h.filename}")
-    # reopenFile()
-    # print("laaaaaa", flush=True)
     h.updatingFile = True
     while(h.updatingFile):
         h.myDir = gDirectory.Get('data')

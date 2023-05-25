@@ -69,9 +69,11 @@ def plotGlobalRate():
             task.wrtcanvas(globalRate, "globalRate.png")
             #if end of file, print out and end thread
             if h.i == 999999:
-                print("event = 999999. End of file.")
-                h.i += 1  # otherwise other threads get stuck in the end 
-                exit()
+                print("DQM event number = 999999. End of file.")
+                #h.i += 1  # otherwise other threads get stuck in the end 
+                while(h.waitingEnd):
+                    t.sleep(1)
+                #refresh graph?  if not, do not reset t0
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")
@@ -198,8 +200,11 @@ def plotBoardRate(canvasName,boardNumber):
 
             #if end of file, exit
             if i == 999999:
-                print("event = 999999. End of file.")
-                exit()
+                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
+                #refresh graph?  if not, do not reset t0
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")

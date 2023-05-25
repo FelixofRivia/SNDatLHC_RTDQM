@@ -64,8 +64,10 @@ def plotHitsChDet(canvasName,boardId,boardName):
             task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
-                print("event = 999999. End of file.",flush=True)
-                exit()
+                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")
@@ -187,8 +189,10 @@ def plotHitsChannel(canvasName,boardNumber):
             task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
-                print("event = 999999. End of file.",flush=True)
-                exit()
+                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")
@@ -299,8 +303,10 @@ def plotHitsBoard(canvasName, boardId, boardName):
             task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
 
             if i == 999999:
-                print("event = 999999. End of file.",flush=True)
-                exit()
+                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")

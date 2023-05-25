@@ -15,6 +15,7 @@ import hitPlots as hit
 import hitMaps as map
 import luminosity as lum
 import reader as read
+import valuePlots as val
 
 #default arguments in header, should be edited as they become parsed arguments
 #add arguments for runNumber and dataNumber
@@ -24,6 +25,9 @@ parser.add_argument('fileNumber', type=str)
 parser.add_argument('serverNumber',type=str)
 parser.add_argument('beammode',type=str)
 args = parser.parse_args()
+
+h.fileN = int(args.fileNumber)
+h.runN = int(args.runNumber)
 
 #make run (file) number 6 (4) digits , 0 padded
 runNumber = args.runNumber.rjust(6,"0")
@@ -35,6 +39,7 @@ print(f"Beammode = {beammode} --------------------------",flush=True)
 h.filename = f"root://snd-server-1:1094///mnt/raid1/data_online/run_{runNumber}/data_{fileNumber}.root" #online
 #h.filename = f"/home/sndmon/QtDqmp/Data/run_{runNumber}/data_{fileNumber}.root"   #local new
 #h.filename = f"/home/sndmon/Snd/Data/run_{runNumber}/data_{fileNumber}.root"   #local old
+
 
 
 #home/sndmon/Snd/Data/run_00' + args.runNumber + '/data_000' + args.dataNumber + '.root'
@@ -131,15 +136,20 @@ def callSciFi60Ch():
 def callHitMap():
     map.plot2DMap(41,41,[0,1,6,7],[2,3],"hitmap",1,1)
 
+def callValueDS():
+    val.plotValueBoard("DS",h.dsId)
+
 usCh = threading.Thread(target=callUSCh)
 sciFiCh = threading.Thread(target=callSciFiCh)
 #sciFi60Ch = threading.Thread(target=callSciFi60Ch)
 hitMap = threading.Thread(target=callHitMap)
+valDS = threading.Thread(target=callValueDS)
 
 #usCh.start()
 # sciFiCh.start()
 #sciFi60Ch.start()
-hitMap.start()
+#hitMap.start()
+valDS.start()
 
 def callDetectorRateSciFi():
     r.plotDetectorRate("Scifi",h.sciFiId[0][0])
@@ -165,7 +175,7 @@ rateUS2 = threading.Thread(target=callRateUS2)
 rateUS3 = threading.Thread(target=callRateUS3)
 
 reader = threading.Thread(target=callReader)
-reader.start()
+reader.start()   # must be always active
 
 #start threads
 
@@ -179,7 +189,7 @@ reader.start()
 #rateUS2.start()
 #rateUS3.start()
 #rateDS.start()
-hitsDS.start()
+#hitsDS.start()
 hitsUS.start()
 #hitsTot.start()
 #hitsSciFi.start()
