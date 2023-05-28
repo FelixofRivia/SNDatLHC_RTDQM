@@ -43,6 +43,8 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
         if(i >= eventEnd):
             hitMap.Draw("colz")
             canvas.Draw()
+            # add evt number
+            hitMap.SetTitle(str(canvasName) + f"HitsPerChannel: evt {i}")
             canvas.Modified()
             canvas.Update()
             # save on root file
@@ -63,6 +65,8 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
             print(f"{canvasName} event number : {i}",flush=True)
             hitMap.Draw("colz")
             canvas.Draw()
+            # add evt number
+            hitMap.SetTitle(str(canvasName) + f"HitsPerChannel: evt {i}")
             canvas.Modified()
             canvas.Update()
             # save on root file

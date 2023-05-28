@@ -58,6 +58,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
             for n in range(1,nCanv+1):
                 hitsPerChannel.cd(n)
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
+                # add evt number
+                eval(f"hArr{canvasName}HitsPerCh")[n-1].SetTitle(f"{canvasName}HitsPerCh: evt {i}")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
@@ -80,6 +82,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
             for n in range(1,nCanv+1):
                 hitsPerChannel.cd(n)
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
+                # add evt number
+                eval(f"hArr{canvasName}HitsPerCh")[n-1].SetTitle(f"{canvasName}HitsPerCh: evt {i}")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
@@ -175,6 +179,8 @@ def plotHitsChannel(canvasName,boardNumber):
         if i%h.updateIndex == 0:
             print(f"{canvasName} event number : {i}",flush=True)
             hHitsPerChannel.Draw("bar hist")
+            # add evt number
+            hHitsPerChannel.SetTitle(f"{canvasName}HitsPerChannel: evt {i}")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
@@ -183,6 +189,8 @@ def plotHitsChannel(canvasName,boardNumber):
         if(i >= eventEnd):
             #update
             hHitsPerChannel.Draw("bar hist")
+            # add evt number
+            hHitsPerChannel.SetTitle(f"{canvasName}HitsPerChannel: evt {i}")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
@@ -297,6 +305,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
             else:
                 hHitsPerBoard.GetYaxis().SetRange(0,int(max*2))
             hHitsPerBoard.Draw("bar hist") 
+            # add evt number
+            hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
             hits_per_board.Modified()
             hits_per_board.Update()
             # save on root file
@@ -322,6 +332,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
             else:
                 hHitsPerBoard.GetYaxis().SetRange(0,int(max*2))
             hHitsPerBoard.Draw("bar hist") 
+            # add evt number
+            hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
             hits_per_board.Modified()
             hits_per_board.Update()
             # save on root file

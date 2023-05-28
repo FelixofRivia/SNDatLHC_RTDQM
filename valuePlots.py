@@ -12,8 +12,8 @@ def plotValueBoard(canvasName, boardId):
     eventStart = h.eventStart
         
     #initialize canvas and histograms
-    hValues = TH1D(f"{canvasName}Value",f"{canvasName} Value",300,0,300)
-    cvalues = TCanvas(f"{canvasName}_value","hitsPerBoard",800,400)
+    hValues = TH1D(f"{canvasName} Value",f"{canvasName} Value",300,0,300)
+    cvalues = TCanvas(f"{canvasName}_value",f"{canvasName}_value",800,400)
     hValues.GetXaxis().SetTitle("value (a.u.)")
     hValues.SetFillColor(38)
     gStyle.SetOptStat("ne")
@@ -27,7 +27,9 @@ def plotValueBoard(canvasName, boardId):
     while(run):
         i = h.iArr[iNext]
         if(i >= eventEnd):
-            hValues.Draw("bar hist") 
+            hValues.Draw("bar hist")
+            # add evt number
+            hValues.SetTitle(f"{canvasName} Value: evt {i}")
             cvalues.Modified()
             cvalues.Update()
             # save on root file
@@ -46,7 +48,9 @@ def plotValueBoard(canvasName, boardId):
         #update histograms
         if i%h.updateIndex == 0:
             print(f"{canvasName} event number : {i}",flush=True)
-            hValues.Draw("bar hist") 
+            hValues.Draw("bar hist")
+            # add evt number
+            hValues.SetTitle(f"{canvasName} Value: evt {i}") 
             cvalues.Modified()
             cvalues.Update()
             # save on root file

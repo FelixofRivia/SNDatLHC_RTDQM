@@ -26,7 +26,7 @@ def plotGlobalRate():
     gStyle.SetOptStat("ne") #only plots hist name and n entries
 
     hRate.GetXaxis().SetTitle("time (sec)")
-    hRate.GetYaxis().SetTitle("total events")
+    hRate.GetYaxis().SetTitle(f"events per {h.rateBinwidth} sec")
     hRateNorm.GetXaxis().SetTitle("time (sec)")
     hRateNorm.GetYaxis().SetTitle("events per second")
     hRate.SetMinimum(0)
@@ -51,6 +51,9 @@ def plotGlobalRate():
             hRate.Draw("hist")
             globalRate.cd(2)
             hRateNorm.Draw("e")
+            # add evt number
+            hRate.SetTitle(f"Total Rate: evt {h.i}")
+            hRateNorm.SetTitle(f"Total RateNorm: evt {h.i}")
             globalRate.Modified()
             globalRate.Update()
             # save on root file
@@ -63,6 +66,9 @@ def plotGlobalRate():
             hRate.Draw("hist")
             globalRate.cd(2)
             hRateNorm.Draw("e")
+            # add evt number
+            hRate.SetTitle(f"Total Rate: evt {h.i}")
+            hRateNorm.SetTitle(f"Total RateNorm: evt {h.i}")
             globalRate.Modified()
             globalRate.Update()
             # save on root file
@@ -153,12 +159,12 @@ def plotBoardRate(canvasName,boardNumber):
     hBoardRate = TH1D(f"{canvasName}Rate",f"{canvasName} Events per {h.rateBinwidth} sec",int(h.timeRange/h.rateBinwidth),0,h.timeRange)
     hBoardRateNorm = TH1D(f"{canvasName}RateNorm",f"{canvasName} Events per second",int(h.timeRange/h.rateBinwidth),0,h.timeRange)
     hBoardRate.GetXaxis().SetTitle("time (sec)")
-    hBoardRate.GetYaxis().SetTitle("total events")
+    hBoardRate.GetYaxis().SetTitle(f"events per {h.rateBinwidth} sec")
     hBoardRateNorm.GetXaxis().SetTitle("time (sec)")
     hBoardRateNorm.GetYaxis().SetTitle("events per second")
     hBoardRate.SetMinimum(0)
     hBoardRateNorm.SetMinimum(0)
-    gStyle.SetOptStat("ne") #only plots hist name and n entries
+    #gStyle.SetOptStat("ne") #only plots hist name and n entries
 
     boardRate = TCanvas(f"{canvasName}Rate",canvasName,600,800)
     boardRate.Divide(1,2)
@@ -182,6 +188,9 @@ def plotBoardRate(canvasName,boardNumber):
             hBoardRate.Draw("hist")
             boardRate.cd(2)
             hBoardRateNorm.Draw("e")
+            # add evt number
+            hBoardRate.SetTitle(f"{canvasName}Rate: evt {i}")
+            hBoardRateNorm.SetTitle(f"{canvasName}RateNorm: evt {i}")
             boardRate.Modified()
             boardRate.Update()
             # save on root file
@@ -193,6 +202,9 @@ def plotBoardRate(canvasName,boardNumber):
             hBoardRate.Draw("hist")
             boardRate.cd(2)
             hBoardRateNorm.Draw("e")
+            # add evt number
+            hBoardRate.SetTitle(f"{canvasName}Rate: evt {i}")
+            hBoardRateNorm.SetTitle(f"{canvasName}RateNorm: evt {i}")
             boardRate.Modified()
             boardRate.Update()
             # save on root file
