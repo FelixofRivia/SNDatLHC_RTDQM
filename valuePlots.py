@@ -20,6 +20,7 @@ def plotValueBoard(canvasName, boardId):
     
     run = True
     i = eventStart
+    iupdate = h.updateIndex
     iNext = len(h.iArr)
     h.iArr.append(i)
 
@@ -46,7 +47,7 @@ def plotValueBoard(canvasName, boardId):
                 exit()
 
         #update histograms
-        if i%h.updateIndex == 0:
+        if i%iupdate == 0:
             print(f"{canvasName} event number : {i}",flush=True)
             hValues.Draw("bar hist")
             # add evt number
@@ -57,12 +58,8 @@ def plotValueBoard(canvasName, boardId):
             task.wrtcanvas(cvalues, f"{canvasName}_value.png")
 
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
 
         #while sharing a value with rate or another thread
         read.avoidOverlap(i,iNext)

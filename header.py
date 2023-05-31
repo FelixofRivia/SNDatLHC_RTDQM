@@ -26,7 +26,7 @@ tsPerSec = 160000000 #160MHz
 #choose how often to update histograms
 ##### WARNING: multi-canvas plotting may crash if update index too low
 rateUpdate = 5000 #events
-updateIndex = 10000 # 500
+updateIndex = 50000 # 500
 
 lumiBinWidth = 5 #sec
 

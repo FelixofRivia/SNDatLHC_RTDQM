@@ -31,7 +31,7 @@ def readEntry():
             h.waitingEnd = True
             while(h.waitingEnd):
                 # if every thread has finished
-                if (h.iArr.count(999999)==len(h.iArr)):
+                if (h.iArr.count(999999)==len(h.iArr) and h.i==999999):
                     try:
                         print("Trying to open new file...", flush=True)
                         task.reopenFile()
@@ -44,7 +44,7 @@ def readEntry():
                         h.iRead = i
                         h.waitingEnd = False
                     except:
-                        t.sleep(5)
+                        t.sleep(3)
                 else:
                     t.sleep(10)
             print("NEW FILE", flush=True)    

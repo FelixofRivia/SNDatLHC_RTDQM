@@ -14,6 +14,7 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
 
     eventStart = h.eventStart
     eventEnd = h.eventEnd
+    iupdate = h.updateIndex
 
     #grab their channels
     xBins = 64*len(xtofIDs)#512 #64*8, but can be done better (select only needed channels, as in boardrate)
@@ -61,7 +62,7 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
                 exit()
 
         #update histograms
-        if i%h.updateIndex == 0:
+        if i%h.iupdate == 0:
             print(f"{canvasName} event number : {i}",flush=True)
             hitMap.Draw("colz")
             canvas.Draw()
@@ -81,18 +82,14 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
         #                 hHitsPerBoard.Fill(f"{boardId[b][d]}",0)
 
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
 
         #while sharing a value with rate or another thread
         read.avoidOverlap(i,iNext)
 
         while(h.readingTree):
-            t.sleep(.005)
+            t.sleep(.0005)
         h.readingTree = True #--------------------------------------------start flag
 
         # load in value. If invalid (<= 0), discard

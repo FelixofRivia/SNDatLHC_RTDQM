@@ -11,6 +11,7 @@ import reader as read
 ########################## Plot Global Rate #######################################
 ###################################################################################
 def plotGlobalRate():
+    startT = t.perf_counter()
     #global plots are used by lumi function
     global hRate, hRateNorm
 
@@ -18,15 +19,19 @@ def plotGlobalRate():
 
     t0 = h.t0
     run = True
+
+    binwidth = h.rateBinwidth
+    tps = h.tsPerSec
+    iupdate = h.rateUpdate
     
 
     #set hists
-    hRate = TH1D("hRate",f"Total Events per {h.rateBinwidth} sec",int(h.timeRange/h.rateBinwidth)+1,0,h.timeRange)
-    hRateNorm = TH1D("hRateNorm","Events per second",int(h.timeRange/h.rateBinwidth)+1,0,h.timeRange)
+    hRate = TH1D("hRate",f"Total Events per {binwidth} sec",int(h.timeRange/binwidth)+1,0,h.timeRange)
+    hRateNorm = TH1D("hRateNorm","Events per second",int(h.timeRange/binwidth)+1,0,h.timeRange)
     gStyle.SetOptStat("ne") #only plots hist name and n entries
 
     hRate.GetXaxis().SetTitle("time (sec)")
-    hRate.GetYaxis().SetTitle(f"events per {h.rateBinwidth} sec")
+    hRate.GetYaxis().SetTitle(f"events per {binwidth} sec")
     hRateNorm.GetXaxis().SetTitle("time (sec)")
     hRateNorm.GetYaxis().SetTitle("events per second")
     hRate.SetMinimum(0)
@@ -42,62 +47,60 @@ def plotGlobalRate():
     print(f"rate start = {h.eventStart}\trate end = {h.eventEnd}")
 
     while(run):
-
+        i = h.i
         #update
-        if h.i%h.rateUpdate == 0:
-            print(f"DQM event number : {h.i}",flush=True)
+        if i%iupdate == 0:
+            print(f"DQM event number : {i}",flush=True)
+            print(t.perf_counter()-startT, flush=True)
             #print(h.iArr,flush=True)
             globalRate.cd(1)
             hRate.Draw("hist")
             globalRate.cd(2)
             hRateNorm.Draw("e")
             # add evt number
-            hRate.SetTitle(f"Total Rate: evt {h.i}")
-            hRateNorm.SetTitle(f"Total RateNorm: evt {h.i}")
+            hRate.SetTitle(f"Total Rate: evt {i}")
+            hRateNorm.SetTitle(f"Total RateNorm: evt {i}")
             globalRate.Modified()
             globalRate.Update()
             # save on root file
             task.wrtcanvas(globalRate, "globalRate.png")
 
         #if run out of events, wait and reopen file. Refresh final event
-        if(h.i >= h.eventEnd):
+        if(i >= h.eventEnd):
             #update
             globalRate.cd(1)
             hRate.Draw("hist")
             globalRate.cd(2)
             hRateNorm.Draw("e")
             # add evt number
-            hRate.SetTitle(f"Total Rate: evt {h.i}")
-            hRateNorm.SetTitle(f"Total RateNorm: evt {h.i}")
+            hRate.SetTitle(f"Total Rate: evt {i}")
+            hRateNorm.SetTitle(f"Total RateNorm: evt {i}")
             globalRate.Modified()
             globalRate.Update()
             # save on root file
             task.wrtcanvas(globalRate, "globalRate.png")
             #if end of file, print out and end thread
-            if h.i == 999999:
-                print("DQM event number = 999999. End of file.")
-                #h.i += 1  # otherwise other threads get stuck in the end 
+            if i == 999999:
+                print("DQM event number = 999999. End of file.") 
                 while(h.waitingEnd):
                     t.sleep(1)
+                i = h.i
                 #refresh graph?  if not, do not reset t0
             #if end of a set range
             elif h.isSetRange == True:
                 print("end of range. Stopping loop...")
                 exit()
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>h.i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
+        
         #check to see if tree is being read. Put up flag while reading
         while(h.readingTree == True):
             t.sleep(.005)
         h.readingTree = True #------------------------------------------------------start flag
 
         #load in value. If invalid (<= 0), discard
-        nb = h.myDir.GetEntry(h.i)
+        nb = h.myDir.GetEntry(i)
         if nb <= 0:
             h.i += 1
             h.readingTree = False
@@ -111,9 +114,9 @@ def plotGlobalRate():
         #if bad event, print out and try again
         if time < 0:
             print("---------------------------------------------------------bad")
-            print(f"i =\t{h.i};\ttime =\t{time};\ttime = {time/h.tsPerSec} sec")
-            print(f"t0 =\t{t0};\t{t0/h.tsPerSec} sec")
-            print(f"ts =\t{ts};\t{ts/h.tsPerSec}")
+            print(f"i =\t{i};\ttime =\t{time};\ttime = {time/tps} sec")
+            print(f"t0 =\t{t0};\t{t0/tps} sec")
+            print(f"ts =\t{ts};\t{ts/tps}")
 
             #if tried 3 times, skip index and keep going
             if retry >= 2:
@@ -128,10 +131,10 @@ def plotGlobalRate():
             continue
         
         #reset hist at the end of the range
-        if time/h.tsPerSec >= h.timeRange:
+        if time/tps >= h.timeRange:
             # avoid random big numbers (better fix to do) 
-            if (ts-t0)/h.tsPerSec >= 2*h.timeRange:
-                print(f"Rate was about to set t0 = {ts/h.tsPerSec} s from {t0/h.tsPerSec} s",flush=True)
+            if (ts-t0)/tps >= 2*h.timeRange:
+                print(f"Rate was about to set t0 = {ts/tps} s from {t0/tps} s",flush=True)
                 continue
             #reset relative t0
             t0 = ts
@@ -139,9 +142,9 @@ def plotGlobalRate():
             hRateNorm.Reset()
 
         #normalized rate
-        hRateNorm.Fill(time/h.tsPerSec,1/h.rateBinwidth)
+        hRateNorm.Fill(time/tps,1/binwidth)
         #unnormalized rate
-        hRate.Fill(time/h.tsPerSec,1)
+        hRate.Fill(time/tps,1)
 
         h.i += 1
 
@@ -154,12 +157,15 @@ def plotBoardRate(canvasName,boardNumber):
     t0 = h.t0
     run = True
     stuck = 0
+    tps = h.tsPerSec
+    binwidth = h.rateBinwidth
+    iupdate = h.updateIndex
 
     #set hists
-    hBoardRate = TH1D(f"{canvasName}Rate",f"{canvasName} Events per {h.rateBinwidth} sec",int(h.timeRange/h.rateBinwidth),0,h.timeRange)
-    hBoardRateNorm = TH1D(f"{canvasName}RateNorm",f"{canvasName} Events per second",int(h.timeRange/h.rateBinwidth),0,h.timeRange)
+    hBoardRate = TH1D(f"{canvasName}Rate",f"{canvasName} Events per {binwidth} sec",int(h.timeRange/binwidth),0,h.timeRange)
+    hBoardRateNorm = TH1D(f"{canvasName}RateNorm",f"{canvasName} Events per second",int(h.timeRange/binwidth),0,h.timeRange)
     hBoardRate.GetXaxis().SetTitle("time (sec)")
-    hBoardRate.GetYaxis().SetTitle(f"events per {h.rateBinwidth} sec")
+    hBoardRate.GetYaxis().SetTitle(f"events per {binwidth} sec")
     hBoardRateNorm.GetXaxis().SetTitle("time (sec)")
     hBoardRateNorm.GetYaxis().SetTitle("events per second")
     hBoardRate.SetMinimum(0)
@@ -178,11 +184,8 @@ def plotBoardRate(canvasName,boardNumber):
 
         i = h.iArr[iNext]
 
-        # if i%50000==0:
-        #     print("board event " + str(i))
-
         #update
-        if i%h.updateIndex == 0:
+        if i%iupdate == 0:
             print(f"{canvasName} event number : {i}",flush=True)
             boardRate.cd(1)
             hBoardRate.Draw("hist")
@@ -223,12 +226,8 @@ def plotBoardRate(canvasName,boardNumber):
                 exit()
         
        # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
        # do not overlap with other threads 
         read.avoidOverlap(i,iNext)
 
@@ -259,9 +258,9 @@ def plotBoardRate(canvasName,boardNumber):
         time = ts-t0
         if time < 0:
             print("---------------------------------------------------------bad")
-            print(f"i =\t{i};\ttime =\t{time};\ttime = {time/h.tsPerSec} sec",flush=True)
-            print(f"t0 =\t{t0};\t{t0/h.tsPerSec} sec",flush=True)
-            print(f"ts =\t{ts};\t{ts/h.tsPerSec}",flush=True)
+            print(f"i =\t{i};\ttime =\t{time};\ttime = {time/tps} sec",flush=True)
+            print(f"t0 =\t{t0};\t{t0/tps} sec",flush=True)
+            print(f"ts =\t{ts};\t{ts/tps}",flush=True)
             print(f"{canvasName} grabbed a bad value. Skipping...",flush=True)
             continue
         
@@ -272,18 +271,18 @@ def plotBoardRate(canvasName,boardNumber):
                 weight = weight +1
                 
         #normalized rate
-        hBoardRateNorm.Fill((ts-t0)/h.tsPerSec,weight/h.rateBinwidth)
+        hBoardRateNorm.Fill((ts-t0)/tps,weight/binwidth)
         #unnormalized rate
-        hBoardRate.Fill((ts-t0)/h.tsPerSec,weight)
+        hBoardRate.Fill((ts-t0)/tps,weight)
 
         #reset hist if past time range
-        if (ts-t0)/h.tsPerSec >= h.timeRange:
+        if (ts-t0)/tps >= h.timeRange:
            # avoid random big numbers (better fix to do) 
-            if (ts-t0)/h.tsPerSec >= 2*h.timeRange:
-                print(f"{canvasName} was about to set t0 = {ts/h.tsPerSec} s from {t0/h.tsPerSec} s",flush=True)
+            if (ts-t0)/tps >= 2*h.timeRange:
+                print(f"{canvasName} was about to set t0 = {ts/tps} s from {t0/tps} s",flush=True)
                 continue
             t0 = ts
             hBoardRate.Reset()
             hBoardRateNorm.Reset()
-           # print(f"{canvasName} set t0 = {t0/h.tsPerSec} s",flush=True)
+           # print(f"{canvasName} set t0 = {t0/tps} s",flush=True)
             

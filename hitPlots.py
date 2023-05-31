@@ -46,6 +46,7 @@ def plotHitsChDet(canvasName,boardId,boardName):
 
     run = True
     i = h.eventStart
+    iupdate = h.updateIndex
     iNext = len(h.iArr)
     h.iArr.append(i)
 
@@ -66,7 +67,7 @@ def plotHitsChDet(canvasName,boardId,boardName):
             task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName} HitCh event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -77,8 +78,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
 
 
         #update histograms
-        if i%h.updateIndex == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
+        if i%iupdate == 0:
+            print(f"{canvasName} HitCh event number : {i}",flush=True)
             for n in range(1,nCanv+1):
                 hitsPerChannel.cd(n)
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
@@ -91,12 +92,8 @@ def plotHitsChDet(canvasName,boardId,boardName):
 
 
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
 
         #while sharing a value with rate or another thread
         read.avoidOverlap(i, iNext)
@@ -167,6 +164,7 @@ def plotHitsChannel(canvasName,boardNumber):
 
     eventEnd = h.eventEnd
     eventStart = h.eventStart
+    iupdate = h.updateIndex
 
     i = eventStart
     run = True
@@ -176,8 +174,8 @@ def plotHitsChannel(canvasName,boardNumber):
     while(run):
         i = h.iArr[iNext]
         #update
-        if i%h.updateIndex == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
+        if i%iupdate == 0:
+            print(f"{canvasName} HitCh event number : {i}",flush=True)
             hHitsPerChannel.Draw("bar hist")
             # add evt number
             hHitsPerChannel.SetTitle(f"{canvasName}HitsPerChannel: evt {i}")
@@ -197,7 +195,7 @@ def plotHitsChannel(canvasName,boardNumber):
             task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName} HitCh event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -208,12 +206,8 @@ def plotHitsChannel(canvasName,boardNumber):
             
             
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
 
         #while sharing a value with rate or another thread
         read.avoidOverlap(i,iNext)
@@ -268,21 +262,15 @@ def plotHitsChannel(canvasName,boardNumber):
 ########################## Plot Hits per Board ####################################
 ###################################################################################
 def plotHitsBoard(canvasName, boardId, boardName):
-    logy = False
-    if canvasName == "total" or canvasName == "Total":
-        logy = True
 
     eventEnd = h.eventEnd
     eventStart = h.eventStart
+    iupdate = h.updateIndex
         
     #initialize canvas and histograms
     hHitsPerBoard = TH1D(f"{canvasName}HitsPerBoard",f"{canvasName} Hits per board",len(boardId),0,len(boardId))
     hits_per_board = TCanvas(f"{canvasName}_hits_per_board","hitsPerBoard",800,400)
-    if logy:
-        hHitsPerBoard.SetMinimum(.1)
-    else:
-        hHitsPerBoard.SetMinimum(0)
-    hits_per_board.SetLogy(logy)
+    hHitsPerBoard.SetMinimum(0)
     hHitsPerBoard.GetXaxis().SetTitle("board")
     hHitsPerBoard.GetYaxis().SetTitle("hits")
     hHitsPerBoard.SetFillColor(38)
@@ -297,13 +285,6 @@ def plotHitsBoard(canvasName, boardId, boardName):
     while(run):
         i = h.iArr[iNext]
         if(i >= eventEnd):
-            #update histograms
-            max = hHitsPerBoard.GetBinContent(hHitsPerBoard.GetMaximumBin())
-            #print(f" max = {max}",flush = True)
-            if logy:
-                hHitsPerBoard.SetMaximum(max*1.5)
-            else:
-                hHitsPerBoard.GetYaxis().SetRange(0,int(max*2))
             hHitsPerBoard.Draw("bar hist") 
             # add evt number
             hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
@@ -313,7 +294,7 @@ def plotHitsBoard(canvasName, boardId, boardName):
             task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
 
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName} HitBoards event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -323,14 +304,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
                 exit()
 
         #update histograms
-        if i%h.updateIndex == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
-            max = hHitsPerBoard.GetBinContent(hHitsPerBoard.GetMaximumBin())
-            #print(f" max = {max}",flush = True)
-            if logy:
-                hHitsPerBoard.SetMaximum(max*1.5)
-            else:
-                hHitsPerBoard.GetYaxis().SetRange(0,int(max*2))
+        if i%iupdate == 0:
+            print(f"{canvasName} HitBoards event number : {i}",flush=True)
             hHitsPerBoard.Draw("bar hist") 
             # add evt number
             hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
@@ -341,7 +316,7 @@ def plotHitsBoard(canvasName, boardId, boardName):
 
         #initialize plot
         if i == h.eventStart:
-            for b in range(len(boardId)):
+            for b in range(len(boardId)):  
                 if type(boardId[b]) == str:
                     hHitsPerBoard.Fill(f"{boardId[b]}",0)
                 else:
@@ -349,12 +324,8 @@ def plotHitsBoard(canvasName, boardId, boardName):
                         hHitsPerBoard.Fill(f"{boardId[b][d]}",0)
 
         # wait for reader 
-        waiting = True
-        while(waiting):
-            if (h.iRead>i):
-                waiting=False
-            else:
-                t.sleep(5)
+        while(h.iRead<=i):
+            t.sleep(5)
 
         #while sharing a value with rate or another thread
         read.avoidOverlap(i,iNext)

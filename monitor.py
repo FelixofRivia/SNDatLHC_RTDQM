@@ -83,6 +83,8 @@ ROOT.EnableImplicitMT(nThreads)
 
 print("To kill program, enter Ctrl+\\",flush=True)
 
+gROOT.SetBatch(True)
+
 #load server
 #go to zh-desktop:710X?top=monitoring
 # serverName = f"http:{serverNumber}?top=monitoring"
@@ -179,21 +181,22 @@ reader.start()   # must be always active
 
 #start threads
 
-# print(h.sciFiId)
+#print(h.totId)
+#print(len(h.totId))
 # print(h.vetoName)
 # print(h.vetoPName)
 # print(h.vetoSlot)
 
-#rateVeto.start()
+rateVeto.start() ###############################  
 #rateUS1.start()
 #rateUS2.start()
 #rateUS3.start()
 #rateDS.start()
-#hitsDS.start()
-#hitsUS.start()
-hitsTot.start()
+hitsDS.start()  ###########################ààà 
+hitsUS.start()  #################################### 
+#hitsTot.start()
 #hitsSciFi.start()
-#vetoCh.start()
+vetoCh.start()            ################################ 
 #rateSciFi11.start()
 #rateSciFi36.start()
 #rateSciFiTot.start()
