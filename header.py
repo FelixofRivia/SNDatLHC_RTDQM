@@ -40,6 +40,7 @@ isSetRange = False #do not try to get new events
 
 #initialize a file
 filename = '/home/sndmon/Snd/Data/run_004208/data_0001.root'
+filedir = '/home/sndmon/Snd/Data/'
 file = TFile()
 wrtfilename = "graphs.root"
 wrtfile = TFile()
@@ -71,6 +72,11 @@ dsName = []
 dsPName = []
 dsSlot = []
 dsId = []
+
+beammonName = []
+beammonPName = []
+beammonSlot = []
+beammonId = []
 
 
 #take board id and name corresponding arrays

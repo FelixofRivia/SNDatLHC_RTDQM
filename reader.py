@@ -44,7 +44,7 @@ def readEntry():
                         h.iRead = i
                         h.waitingEnd = False
                     except:
-                        t.sleep(3)
+                        t.sleep(2)
                 else:
                     t.sleep(10)
             print("NEW FILE", flush=True)    
@@ -71,7 +71,7 @@ def readEntry():
                         reopen = False
                     except:
                         print("Failed to update file ... trying again", flush = True)
-                        t.sleep(5)
+                        t.sleep(3)
                 print("opened",flush=True)
                 # h.myDir.Refresh()
                 # h.file.ReadKeys()
@@ -89,26 +89,11 @@ def readEntry():
 
 def avoidOverlap(i,iNext):
     #while sharing a value with rate or another thread
-    while(i > h.i):   #i > h.i
-        #print(f"tried to grab val, waiting...\i = {i}",flush=True)
-        #print(h.iArr,flush=True)
+    while(i > h.i):   
         t.sleep(3)
         
         
 # def avoidOverlap(i,iNext):
-#      #while sharing a value with rate or another thread
-#        while(i == h.i or len(set(h.iArr.count(i) for n in h.iArr)) > 1):
-#             print(f"tried to grab val, waiting...\i = {i}",flush=True)
-#             print(h.iArr,flush=True)
-#             if i == h.eventEnd or i == (h.eventEnd - 1):
-#                 t.sleep(h.refreshRate)
-#             else:
-#                 print(f"tried to grab val, waiting...\ti = {i}")
-#                 print(f"eventEnd = {h.eventEnd}")
-#             #if with another thread, wait by priority of a .5 second delay
-#             if len(set(h.iArr.count(i) for n in h.iArr)) > 1:
-#                 t.sleep(iNext*.5)
-#                 break
-#             #if with rate, rate always has priority
-#             else:
-#                 t.sleep(.25)
+#     #while sharing a value with rate or another thread
+#     while(i == h.i or (h.iArr.count(i)>1 and i>0)):
+#         t.sleep(iNext*.5)

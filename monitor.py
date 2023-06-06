@@ -16,6 +16,7 @@ import hitMaps as map
 import luminosity as lum
 import reader as read
 import valuePlots as val
+import timeAlign as align
 
 #default arguments in header, should be edited as they become parsed arguments
 #add arguments for runNumber and dataNumber
@@ -36,14 +37,13 @@ serverNumber = args.serverNumber.rjust(4,"0")
 beammode = args.beammode.lower()
 print(f"Beammode = {beammode} --------------------------",flush=True)
 
-h.filename = f"root://snd-server-1:1094///mnt/raid1/data_online/run_{runNumber}/data_{fileNumber}.root" #online
-#h.filename = f"/home/sndmon/QtDqmp/Data/run_{runNumber}/data_{fileNumber}.root"   #local new
-#h.filename = f"/home/sndmon/Snd/Data/run_{runNumber}/data_{fileNumber}.root"   #local old
 
+#h.filedir = f"root://snd-server-1:1094///mnt/raid1/data_online/" #online
+#h.filedir = f"/home/sndmon/QtDqmp/Data/"   #local new
+#h.filedir = f"/home/sndmon/Snd/Data/"   #local old
+h.filedir = f"/home/sndecs/RunData/" #online TB
 
-
-#home/sndmon/Snd/Data/run_00' + args.runNumber + '/data_000' + args.dataNumber + '.root'
-#file = TFile(filename,'r')
+h.filename = h.filedir + f"run_{runNumber}/data_{fileNumber}.root"
 
 h.wrtfile = ROOT.TFile.Open(h.wrtfilename, "RECREATE")
 print(f"creating write file: {h.wrtfilename}",flush=True)
@@ -54,19 +54,11 @@ print(f"opening file first time: {h.filename}",flush=True)
 
 task.setBeamParam(beammode)
 
-#settings for number of events to run
-# task.reopenFile()
-# h.myDir = gDirectory.Get('data')
-#print("testtt", flush=True)
-
 #avoid segmentation violation when closing file
 #TH1.AddDirectory(False)
 
 #run through all the events (best for complete files)
 task.updateAllEvents()
-# task.reopenFile()
-# h.myDir = gDirectory.Get('data')
-# print("testtt", flush=True)
 
 #h.plotWholeRate = True
 
@@ -83,34 +75,37 @@ ROOT.EnableImplicitMT(nThreads)
 
 print("To kill program, enter Ctrl+\\",flush=True)
 
-gROOT.SetBatch(True)
+#gROOT.SetBatch(True)
 
 #load server
 #go to zh-desktop:710X?top=monitoring
-# serverName = f"http:{serverNumber}?top=monitoring"
-# serv = THttpServer(serverName)
-# serv.CreateServerThread()
+#serverName = f"http:{serverNumber}?top=monitoring"
+#serv = THttpServer(serverName)
+#serv.CreateServerThread()
+#serv.Register("Graphs",h.wrtfile)
 
 #serv.CreateEngine("fastcgi:9000")
 
 #pull board info from json file
-task.getBoardArrays()
+task.getBoardArrays(beammode)
 
 #define threading functions
 def callRateVeto():
     r.plotBoardRate("Veto",58)
-def callRateDs24():
-    r.plotBoardRate("ds2_ds4",55)
+def callRateDs():
+    r.plotBoardRate("DS",44)
 def callRateSciFi11():
     r.plotBoardRate("scifiTest",11)
 def callRateSciFi36():
     r.plotBoardRate("scifiTest",36)
 def callRateUS1():
-    r.plotBoardRate("US1_2",7)
+    r.plotBoardRate("US1",32)
 def callRateUS2():
     r.plotBoardRate("US3_4",60)
 def callRateUS3():
     r.plotBoardRate("US5",52)
+def callRateBM():
+    r.plotBoardRate("BM",59)
 
 def callGlobalRate():
     r.plotGlobalRate()
@@ -123,12 +118,18 @@ def callHitsDS():
     hit.plotHitsBoard("DS",h.dsId,h.dsName)
 def callHitsUS():
     hit.plotHitsBoard("US",h.usId,h.usName)
+def callHitsBM():
+    hit.plotHitsBoard("BM",h.beammonId,h.beammonName)
 
 def callChannelVeto():
     hit.plotHitsChannel("Veto",int(h.vetoId[0].strip("board_")))
 
 def callUSCh():
     hit.plotHitsChDet("US",h.usId,h.usName)
+def callDSCh():
+    hit.plotHitsChDet("DS",h.dsId,h.dsName)
+def callBMCh():
+    hit.plotHitsChDet("BM",h.beammonId,h.beammonName)
 def callSciFiCh():
     hit.plotHitsChDet("SciFi",h.sciFiId,h.sciFiName)
 
@@ -136,22 +137,37 @@ def callSciFi60Ch():
     hit.plotHitsChannel("SciFi",60)
 
 def callHitMap():
-    map.plot2DMap(41,41,[0,1,6,7],[2,3],"hitmap",1,1)
+    map.plot2DMap(24,53,[0,1,2,3,5,6,7],[0,1,2,3,5,6,7],"SciFi_1_hitmap",1,1)
 
 def callValueDS():
     val.plotValueBoard("DS",h.dsId)
 
+def callValueUS():
+    val.plotValueBoard("US",["board_34"])    ##################################### us1 
+
+def callAlignUS():
+    align.plotTimeAlign("US",h.usId)
+
+
 usCh = threading.Thread(target=callUSCh)
+dsCh = threading.Thread(target=callDSCh)
+BMCh = threading.Thread(target=callBMCh)
 sciFiCh = threading.Thread(target=callSciFiCh)
 #sciFi60Ch = threading.Thread(target=callSciFi60Ch)
 hitMap = threading.Thread(target=callHitMap)
 valDS = threading.Thread(target=callValueDS)
+valUS = threading.Thread(target=callValueUS)
+alignUS = threading.Thread(target=callAlignUS)
 
 #usCh.start()
-# sciFiCh.start()
+#dsCh.start()
+#BMCh.start() 
+#sciFiCh.start()
 #sciFi60Ch.start()
 #hitMap.start()
 #valDS.start()
+#valUS.start()
+alignUS.start()
 
 def callDetectorRateSciFi():
     r.plotDetectorRate("Scifi",h.sciFiId[0][0])
@@ -165,48 +181,52 @@ def callReader():
 hitsTot = threading.Thread(target=callHitsTot)
 hitsSciFi = threading.Thread(target=callHitsSciFi)
 rateVeto = threading.Thread(target=callRateVeto)
-rateDS   = threading.Thread(target=callRateDs24)
+rateDS   = threading.Thread(target=callRateDs)
 vetoCh = threading.Thread(target=callChannelVeto)
 hitsDS = threading.Thread(target=callHitsDS)
 hitsUS = threading.Thread(target=callHitsUS)
+hitsBM = threading.Thread(target=callHitsBM)
 rateSciFi11 = threading.Thread(target=callRateSciFi11)
 rateSciFi36 = threading.Thread(target=callRateSciFi36)
 rateSciFiTot = threading.Thread(target=callDetectorRateSciFi)
 rateUS1 = threading.Thread(target=callRateUS1)
 rateUS2 = threading.Thread(target=callRateUS2)
 rateUS3 = threading.Thread(target=callRateUS3)
+rateBM = threading.Thread(target=callRateBM)
 
 reader = threading.Thread(target=callReader)
 reader.start()   # must be always active
 
 #start threads
 
-#print(h.totId)
+print(h.usId)
 #print(len(h.totId))
-# print(h.vetoName)
+#print(h.beammonName)
 # print(h.vetoPName)
-# print(h.vetoSlot)
+#print(h.beammonId)
+#print(h.beammonSlot)
 
-rateVeto.start() ###############################  
+#rateVeto.start() ###############################  
 #rateUS1.start()
 #rateUS2.start()
 #rateUS3.start()
 #rateDS.start()
-hitsDS.start()  ###########################ààà 
-hitsUS.start()  #################################### 
+#rateBM.start()
+#hitsDS.start()  ########################### 
+#hitsUS.start()  #################################### 
+#hitsBM.start()
 #hitsTot.start()
 #hitsSciFi.start()
-vetoCh.start()            ################################ 
+#vetoCh.start()            ################################ 
 #rateSciFi11.start()
 #rateSciFi36.start()
 #rateSciFiTot.start()
 
 #if args.beammode == 'STABLE':
-print(f"Start Lumi = {h.updateIndex}",flush=True)
 lumi = threading.Thread(target=callLumi)
 #lumi.start()
 
-print(f"update = {h.updateIndex}",flush=True)
+#print(f"update = {h.updateIndex}",flush=True)
 #rate should ALWAYS be running!
 rate = threading.Thread(target=callGlobalRate)
 rate.start()

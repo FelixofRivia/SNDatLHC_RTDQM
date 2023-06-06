@@ -1,43 +1,47 @@
-from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle
+from pyexpat.errors import XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING
+from ROOT import TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TH2D, gStyle
 import numpy as np
+import array
 import time as t
 import header as h
-import tasks as task
-import math
-import ROOT
 import reader as read
+import tasks as task
 
-def plotValueBoard(canvasName, boardId):
-    eventEnd = h.eventEnd
+def plotTimeAlign(canvasName,boardId):
+
     eventStart = h.eventStart
-        
+    iupdate = h.updateIndex
+    
+    xBins = len(boardId)
+    yBins = 80
+
     #initialize canvas and histograms
-    hValues = TH1D(f"{canvasName} Value",f"{canvasName} Value",300,0,300)
-    cvalues = TCanvas(f"{canvasName}_value",f"{canvasName}_value",800,400)
-    hValues.GetXaxis().SetTitle("value (a.u.)")
-    hValues.SetFillColor(38)
+    hTimeAlign = TH2D(str(canvasName) + "TimeAlign",str(canvasName) + " TimeAlign",xBins,0,xBins,yBins,0,8)
+    time_align = TCanvas(f"{canvasName}_time_align","time_align",800,400)
+    hTimeAlign.GetXaxis().SetTitle("board")
+    hTimeAlign.GetYaxis().SetTitle("timestamp")
+    hTimeAlign.SetFillColor(38)
     gStyle.SetOptStat("ne")
     
     run = True
     i = eventStart
-    iupdate = h.updateIndex
     iNext = len(h.iArr)
     h.iArr.append(i)
 
 
     while(run):
         i = h.iArr[iNext]
-        if(i >= eventEnd):
-            hValues.Draw("bar hist")
+        if(i >= h.eventEnd):
+            hTimeAlign.Draw("bar hist") 
             # add evt number
-            hValues.SetTitle(f"{canvasName} Value: evt {i}")
-            cvalues.Modified()
-            cvalues.Update()
+            hTimeAlign.SetTitle(f"{canvasName} Hits per Board: evt {i}")
+            time_align.Modified()
+            time_align.Update()
             # save on root file
-            task.wrtcanvas(cvalues, f"{canvasName}_value.png")
+            task.wrtcanvas(time_align, f"{canvasName}_hits_per_board.png")
 
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName} HitBoards event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -48,14 +52,23 @@ def plotValueBoard(canvasName, boardId):
 
         #update histograms
         if i%iupdate == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
-            hValues.Draw("bar hist")
+            print(f"{canvasName} HitBoards event number : {i}",flush=True)
+            hTimeAlign.Draw("colz") 
             # add evt number
-            hValues.SetTitle(f"{canvasName} Value: evt {i}") 
-            cvalues.Modified()
-            cvalues.Update()
+            hTimeAlign.SetTitle(f"{canvasName} Hits per Board: evt {i}")
+            time_align.Modified()
+            time_align.Update()
             # save on root file
-            task.wrtcanvas(cvalues, f"{canvasName}_value.png")
+            task.wrtcanvas(time_align, f"{canvasName}_hits_per_board.png")
+
+        #initialize plot
+        # if i == h.eventStart:
+        #     for b in range(len(boardId)):  
+        #         if type(boardId[b]) == str:
+        #             hTimeAlign.Fill(f"{boardId[b]}",0)
+        #         else:
+        #             for d in range(len(boardId[b])):
+        #                 hTimeAlign.Fill(f"{boardId[b][d]}",0)
 
         # wait for reader 
         while(h.iRead<=i):
@@ -84,9 +97,8 @@ def plotValueBoard(canvasName, boardId):
         # load all hit boards 
         boardArr=np.uint8(h.myDir.board_id)
 
-        # load all values 
-       # values=np.uint8(h.myDir.value)
-        values=np.uint8(h.myDir.v_fine)  #NOT CALIBRATED 
+        # load all hit boards 
+        timeArr=np.double(h.myDir.timestamp)
         h.readingTree = False #----------------------------------------end flag
 
         #for each set of boards
@@ -94,19 +106,21 @@ def plotValueBoard(canvasName, boardId):
             #if there's just one board:
             if type(boardId[b]) == str:
                 bn = int(boardId[b].strip("board_")) # I need just the number
-               # find values 
-                for n in range(0,len(boardArr)):
+               # count how many hits 
+                for n in range(len(boardArr)):
                     if boardArr[n] == bn:
-                        hValues.Fill(values[n])
-
+                        hTimeAlign.Fill(boardId[b],timeArr[n],1)
             #if there are multiple boards:
             else:
                 #for each board:
                 for d in range(0,len(boardId[b])):
                     bn = int(boardId[b][d].strip("board_")) # I need just the number
-                    # find values 
-                    for n in range(0,len(boardArr)):
+                    # count how many hits 
+                    for n in range(len(boardArr)):
                         if boardArr[n] == bn:
-                            hValues.Fill(values[n])
+                            hTimeAlign.Fill(boardId[b][d],timeArr[n],1)
+
 
         h.iArr[iNext] += 1
+
+

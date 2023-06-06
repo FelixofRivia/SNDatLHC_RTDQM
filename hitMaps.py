@@ -13,7 +13,6 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
     yBoard = "board_" + str(yBoardNumber)
 
     eventStart = h.eventStart
-    eventEnd = h.eventEnd
     iupdate = h.updateIndex
 
     #grab their channels
@@ -41,7 +40,7 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
 
     while(run):
         i = h.iArr[iNext]
-        if(i >= eventEnd):
+        if(i >= h.eventEnd):
             hitMap.Draw("colz")
             canvas.Draw()
             # add evt number
@@ -62,7 +61,7 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
                 exit()
 
         #update histograms
-        if i%h.iupdate == 0:
+        if i%iupdate == 0:
             print(f"{canvasName} event number : {i}",flush=True)
             hitMap.Draw("colz")
             canvas.Draw()

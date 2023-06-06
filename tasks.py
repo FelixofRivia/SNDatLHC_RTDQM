@@ -9,7 +9,7 @@ def updateFileNumber():    # for online data only
     h.fileN += 1
     fileNumber = str(h.fileN).rjust(4,"0")
     runNumber = str(h.runN).rjust(6,"0")
-    h.filename = f"root://snd-server-1:1094///mnt/raid1/data_online/run_{runNumber}/data_{fileNumber}.root"
+    h.filename = h.filedir + f"run_{runNumber}/data_{fileNumber}.root"
     print(f"New file name: {h.filename}", flush=True)
 
 def wrtcanvas(canv, name):
@@ -31,6 +31,7 @@ def setBeamParam(beammode):
         h.rateBinwidth = 30
         h.timeRange = 300
         h.rateUpdate = 50000
+        h.updateIndex = 50000
     elif beammode in 'squeeze' or beammode in 'flat top':
         h.rateBinwidth = 60
         h.timeRange = 600
@@ -39,6 +40,12 @@ def setBeamParam(beammode):
         h.rateBinwidth = 60
         h.timeRange = 3600
         h.rateUpdate = 50000
+    elif beammode in 'testbeam':
+        h.rateBinwidth = 10
+        h.timeRange = 200
+        h.rateUpdate = 10000
+        h.updateIndex = 10000
+        h.refreshRate = 5
     else:
         h.rateBinwidth = 180
         h.timeRange = 6000
@@ -315,14 +322,20 @@ def getMultiboard(type):
         h.totPName.append(subPanelNameArray)
     return boardId,panelName,subPanelName,slotsArray
 
-def getBoardArrays():
+def getBoardArrays(beammode):
 
     #info about board arrays:
     #Board ID: Non-Scifi = single ID / Scifi = array of boardID's
     #Board Name: always a scalar of what to call the board / group of boards
     #Panel Name: always an array of panels or pieces that make up the board / group of boards
     #Slots/TofpetID: Non-Scifi = array of arrays (tofpet id per panel, multiple panels per group of boards) / Scifi: array, always [0-7] for all boards
-    h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
+
+
+
+   # add back 
+   # h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
     h.sciFiId, h.sciFiName, h.sciFiPName, h.sciFiSlot = getMultiboard("scifi")
     h.usId, h.usName, h.usPName, h.usSlot = getMultislot("us")
     h.dsId, h.dsName, h.dsPName, h.dsSlot = getMultislot("ds")
+    if beammode=="testbeam":
+        h.beammonId, h.beammonName, h.beammonPName, h.beammonSlot = getMultislot("beammon")

@@ -10,6 +10,7 @@ import reader as read
 hArrUSHitsPerCh = []
 hArrDSHitsPerCh = []
 hArrSciFiHitsPerCh = []
+hArrBMHitsPerCh = []
 ###################################################################################
 ########################## Plot Hits per Channel of a Detector ####################
 ###################################################################################
@@ -162,7 +163,6 @@ def plotHitsChannel(canvasName,boardNumber):
     hitsPerChannel = TCanvas(f"{canvasName}_hits_per_channel",f"{canvasName} hits per channel",600,800)
     gStyle.SetOptStat("ne")
 
-    eventEnd = h.eventEnd
     eventStart = h.eventStart
     iupdate = h.updateIndex
 
@@ -184,7 +184,7 @@ def plotHitsChannel(canvasName,boardNumber):
             # save on root file
             task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
-        if(i >= eventEnd):
+        if(i >= h.eventEnd):
             #update
             hHitsPerChannel.Draw("bar hist")
             # add evt number
@@ -263,7 +263,6 @@ def plotHitsChannel(canvasName,boardNumber):
 ###################################################################################
 def plotHitsBoard(canvasName, boardId, boardName):
 
-    eventEnd = h.eventEnd
     eventStart = h.eventStart
     iupdate = h.updateIndex
         
@@ -284,7 +283,7 @@ def plotHitsBoard(canvasName, boardId, boardName):
 
     while(run):
         i = h.iArr[iNext]
-        if(i >= eventEnd):
+        if(i >= h.eventEnd):
             hHitsPerBoard.Draw("bar hist") 
             # add evt number
             hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
