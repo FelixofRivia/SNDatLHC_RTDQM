@@ -41,7 +41,7 @@ print(f"Beammode = {beammode} --------------------------",flush=True)
 #h.filedir = f"root://snd-server-1:1094///mnt/raid1/data_online/" #online
 #h.filedir = f"/home/sndmon/QtDqmp/Data/"   #local new
 #h.filedir = f"/home/sndmon/Snd/Data/"   #local old
-h.filedir = f"/home/sndecs/RunData/" #online TB
+h.filedir = f"/home/sndecs/RunData/" #local TB
 
 h.filename = h.filedir + f"run_{runNumber}/data_{fileNumber}.root"
 
@@ -159,12 +159,12 @@ valDS = threading.Thread(target=callValueDS)
 valUS = threading.Thread(target=callValueUS)
 alignUS = threading.Thread(target=callAlignUS)
 
-#usCh.start()
+usCh.start()
 #dsCh.start()
 #BMCh.start() 
 #sciFiCh.start()
 #sciFi60Ch.start()
-#hitMap.start()
+hitMap.start()
 #valDS.start()
 #valUS.start()
 alignUS.start()
@@ -199,7 +199,7 @@ reader.start()   # must be always active
 
 #start threads
 
-print(h.usId)
+#print(h.usId)
 #print(len(h.totId))
 #print(h.beammonName)
 # print(h.vetoPName)

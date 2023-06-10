@@ -62,13 +62,14 @@ def plotHitsChDet(canvasName,boardId,boardName):
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
                 # add evt number
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].SetTitle(f"{canvasName}HitsPerCh: evt {i}")
+                task.wrthisto(eval(f"hArr{canvasName}HitsPerCh")[n-1], f"{canvasName}{n}_Hits_per_channel")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
-            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
+            #task.wrthisto(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
             if i == 999999:
-                print(f"{canvasName} HitCh event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Hits_per_channel event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -80,16 +81,17 @@ def plotHitsChDet(canvasName,boardId,boardName):
 
         #update histograms
         if i%iupdate == 0:
-            print(f"{canvasName} HitCh event number : {i}",flush=True)
+            print(f"{canvasName}_Hits_per_channel event number : {i}",flush=True)
             for n in range(1,nCanv+1):
                 hitsPerChannel.cd(n)
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].Draw("bar hist")
                 # add evt number
                 eval(f"hArr{canvasName}HitsPerCh")[n-1].SetTitle(f"{canvasName}HitsPerCh: evt {i}")
+                task.wrthisto(eval(f"hArr{canvasName}HitsPerCh")[n-1], f"{canvasName}{n}_Hits_per_channel")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
-            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
+            #task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
 
 
         # wait for reader 
@@ -175,14 +177,14 @@ def plotHitsChannel(canvasName,boardNumber):
         i = h.iArr[iNext]
         #update
         if i%iupdate == 0:
-            print(f"{canvasName} HitCh event number : {i}",flush=True)
+            print(f"{canvasName}_Hits_per_channel number : {i}",flush=True)
             hHitsPerChannel.Draw("bar hist")
             # add evt number
             hHitsPerChannel.SetTitle(f"{canvasName}HitsPerChannel: evt {i}")
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
-            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
+            task.wrthisto(hHitsPerChannel, f"{canvasName}_Hits_per_channel")
 
         if(i >= h.eventEnd):
             #update
@@ -192,10 +194,10 @@ def plotHitsChannel(canvasName,boardNumber):
             hitsPerChannel.Modified()
             hitsPerChannel.Update()
             # save on root file
-            task.wrtcanvas(hitsPerChannel, f"{canvasName}_hits_per_channel.png")
+            task.wrthisto(hHitsPerChannel, f"{canvasName}_Hits_per_channel")
 
             if i == 999999:
-                print(f"{canvasName} HitCh event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Hits_per_channel event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -290,10 +292,10 @@ def plotHitsBoard(canvasName, boardId, boardName):
             hits_per_board.Modified()
             hits_per_board.Update()
             # save on root file
-            task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
+            task.wrthisto(hHitsPerBoard, f"{canvasName}_Hits_per_board")
 
             if i == 999999:
-                print(f"{canvasName} HitBoards event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Hits_per_board event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -304,14 +306,15 @@ def plotHitsBoard(canvasName, boardId, boardName):
 
         #update histograms
         if i%iupdate == 0:
-            print(f"{canvasName} HitBoards event number : {i}",flush=True)
+            print(f"{canvasName}_Hits_per_board event number : {i}",flush=True)
             hHitsPerBoard.Draw("bar hist") 
             # add evt number
             hHitsPerBoard.SetTitle(f"{canvasName} Hits per Board: evt {i}")
             hits_per_board.Modified()
             hits_per_board.Update()
             # save on root file
-            task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
+            #task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
+            task.wrthisto(hHitsPerBoard, f"{canvasName}_Hits_per_board")
 
         #initialize plot
         if i == h.eventStart:

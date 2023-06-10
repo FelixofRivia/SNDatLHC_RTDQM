@@ -34,10 +34,10 @@ def plotValueBoard(canvasName, boardId):
             cvalues.Modified()
             cvalues.Update()
             # save on root file
-            task.wrtcanvas(cvalues, f"{canvasName}_value.png")
+            task.wrthisto(hValues, f"{canvasName}_QDC")
 
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_QDC event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -48,14 +48,14 @@ def plotValueBoard(canvasName, boardId):
 
         #update histograms
         if i%iupdate == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
+            print(f"{canvasName}_QDC event number : {i}",flush=True)
             hValues.Draw("bar hist")
             # add evt number
             hValues.SetTitle(f"{canvasName} Value: evt {i}") 
             cvalues.Modified()
             cvalues.Update()
             # save on root file
-            task.wrtcanvas(cvalues, f"{canvasName}_value.png")
+            task.wrthisto(hValues, f"{canvasName}_QDC")
 
         # wait for reader 
         while(h.iRead<=i):

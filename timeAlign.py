@@ -34,14 +34,14 @@ def plotTimeAlign(canvasName,boardId):
         if(i >= h.eventEnd):
             hTimeAlign.Draw("bar hist") 
             # add evt number
-            hTimeAlign.SetTitle(f"{canvasName} Hits per Board: evt {i}")
+            hTimeAlign.SetTitle(f"{canvasName}_time_align: evt {i}")
             time_align.Modified()
             time_align.Update()
             # save on root file
-            task.wrtcanvas(time_align, f"{canvasName}_hits_per_board.png")
+            task.wrthisto(hTimeAlign, f"{canvasName}_Time_alignement")
 
             if i == 999999:
-                print(f"{canvasName} HitBoards event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Time_alignement event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -52,14 +52,14 @@ def plotTimeAlign(canvasName,boardId):
 
         #update histograms
         if i%iupdate == 0:
-            print(f"{canvasName} HitBoards event number : {i}",flush=True)
+            print(f"{canvasName}_Time_alignement event number : {i}",flush=True)
             hTimeAlign.Draw("colz") 
             # add evt number
-            hTimeAlign.SetTitle(f"{canvasName} Hits per Board: evt {i}")
+            hTimeAlign.SetTitle(f"{canvasName}_time_align: evt {i}")
             time_align.Modified()
             time_align.Update()
             # save on root file
-            task.wrtcanvas(time_align, f"{canvasName}_hits_per_board.png")
+            task.wrthisto(hTimeAlign, f"{canvasName}_Time_alignement")
 
         #initialize plot
         # if i == h.eventStart:

@@ -21,6 +21,15 @@ def wrtcanvas(canv, name):
     h.wrtfile.Close()
     h.writingFile = False
 
+def wrthisto(histo, name):
+    while (h.writingFile):
+        t.sleep(0.1)
+    h.writingFile = True
+    h.wrtfile = ROOT.TFile.Open(h.wrtfilename,'UPDATE')
+    h.wrtfile.WriteObject(histo, name, "overwrite")
+    h.wrtfile.Close()
+    h.writingFile = False
+
 def reopenFile():
     print("Reopen file", flush=True)
     h.file.Close()

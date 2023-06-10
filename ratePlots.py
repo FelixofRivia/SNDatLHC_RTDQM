@@ -44,13 +44,11 @@ def plotGlobalRate():
     ts = 0
     retry = 0
 
-    print(f"rate start = {h.eventStart}\trate end = {h.eventEnd}")
-
     while(run):
         i = h.i
         #update
         if i%iupdate == 0:
-            print(f"DQM event number : {i}",flush=True)
+            print(f"TOT_Rate event number : {i}",flush=True)
             print(t.perf_counter()-startT, flush=True)
             #print(h.iArr,flush=True)
             globalRate.cd(1)
@@ -63,7 +61,8 @@ def plotGlobalRate():
             globalRate.Modified()
             globalRate.Update()
             # save on root file
-            task.wrtcanvas(globalRate, "globalRate.png")
+            task.wrthisto(hRate, "TOT_Rate")
+            task.wrthisto(hRateNorm, "TOT_Rate_norm")
 
         #if run out of events, wait and reopen file. Refresh final event
         if(i >= h.eventEnd):
@@ -78,10 +77,11 @@ def plotGlobalRate():
             globalRate.Modified()
             globalRate.Update()
             # save on root file
-            task.wrtcanvas(globalRate, "globalRate.png")
+            task.wrthisto(hRate, "TOT_Rate")
+            task.wrthisto(hRateNorm, "TOT_Rate_norm")
             #if end of file, print out and end thread
             if i == 999999:
-                print("DQM event number = 999999. End of file.") 
+                print("TOT_Rate event number = 999999. End of file.") 
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.i
@@ -186,7 +186,7 @@ def plotBoardRate(canvasName,boardNumber):
 
         #update
         if i%iupdate == 0:
-            print(f"{canvasName} event number : {i}",flush=True)
+            print(f"{canvasName}_Rate event number : {i}",flush=True)
             boardRate.cd(1)
             hBoardRate.Draw("hist")
             boardRate.cd(2)
@@ -197,7 +197,8 @@ def plotBoardRate(canvasName,boardNumber):
             boardRate.Modified()
             boardRate.Update()
             # save on root file
-            task.wrtcanvas(boardRate, f"{canvasName}Rate.png")
+            task.wrthisto(hBoardRate, f"{canvasName}_Rate")
+            task.wrthisto(hBoardRateNorm, f"{canvasName}_Rate_norm")
 
         #if end of events in file
         if(i >= h.eventEnd):
@@ -211,11 +212,12 @@ def plotBoardRate(canvasName,boardNumber):
             boardRate.Modified()
             boardRate.Update()
             # save on root file
-            task.wrtcanvas(boardRate, f"{canvasName}Rate.png")
+            task.wrthisto(hBoardRate, f"{canvasName}_Rate")
+            task.wrthisto(hBoardRateNorm, f"{canvasName}_Rate_norm")
 
             #if end of file, exit
             if i == 999999:
-                print(f"{canvasName} event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Rate event number : 999999. End of file",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
