@@ -104,21 +104,21 @@ def plotTimeAlign(canvasName,boardId):
         #for each set of boards
         for b in range(0,len(boardId)):
             #if there's just one board:
-            if type(boardId[b]) == str:
-                bn = int(boardId[b].strip("board_")) # I need just the number
+            if type(boardId[b]) == int:
+                bn = boardId[b] # I need just the number
                # count how many hits 
                 for n in range(len(boardArr)):
                     if boardArr[n] == bn:
-                        hTimeAlign.Fill(boardId[b],timeArr[n],1)
+                        hTimeAlign.Fill(f"board_{boardId[b]}",timeArr[n],1)
             #if there are multiple boards:
             else:
                 #for each board:
                 for d in range(0,len(boardId[b])):
-                    bn = int(boardId[b][d].strip("board_")) # I need just the number
+                    bn = boardId[b][d] # I need just the number
                     # count how many hits 
                     for n in range(len(boardArr)):
                         if boardArr[n] == bn:
-                            hTimeAlign.Fill(boardId[b][d],timeArr[n],1)
+                            hTimeAlign.Fill(f"board_{boardId[b][d]}",timeArr[n],1)
 
 
         h.iArr[iNext] += 1

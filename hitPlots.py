@@ -136,9 +136,9 @@ def plotHitsChDet(canvasName,boardId,boardName):
         #for each set of boards
         for b in range(0,len(boardId)):
             #if there's just one board:
-            if type(boardId[b]) == str:
+            if type(boardId[b]) == int:
                 for j, bn in enumerate(boardID):
-                    if bn == int(boardId[b].strip("board_")):
+                    if bn == boardId[b]:
                         ch = 64*tofID[j] + tofChannel[j]  
                         eval(f"hArr{canvasName}HitsPerCh")[b].Fill(ch,1)
                 
@@ -147,7 +147,7 @@ def plotHitsChDet(canvasName,boardId,boardName):
                 #for each board:
                 for d in range(0,len(boardId[b])):
                     for j, bn in enumerate(boardID):
-                        if bn == int(boardId[b][d].strip("board_")):
+                        if bn == boardId[b][d]:
                             ch = 64*tofID[j] + tofChannel[j]  
                             eval(f"hArr{canvasName}HitsPerCh")[d+3*b].Fill(ch,1) #scifi is an array of arrays with 3 boards 
 
@@ -319,11 +319,11 @@ def plotHitsBoard(canvasName, boardId, boardName):
         #initialize plot
         if i == h.eventStart:
             for b in range(len(boardId)):  
-                if type(boardId[b]) == str:
-                    hHitsPerBoard.Fill(f"{boardId[b]}",0)
+                if type(boardId[b]) == int:
+                    hHitsPerBoard.Fill(f"board_{boardId[b]}",0)
                 else:
                     for d in range(len(boardId[b])):
-                        hHitsPerBoard.Fill(f"{boardId[b][d]}",0)
+                        hHitsPerBoard.Fill(f"board_{boardId[b][d]}",0)
 
         # wait for reader 
         while(h.iRead<=i):
@@ -356,27 +356,27 @@ def plotHitsBoard(canvasName, boardId, boardName):
         #for each set of boards
         for b in range(0,len(boardId)):
             #if there's just one board:
-            if type(boardId[b]) == str:
-                bn = int(boardId[b].strip("board_")) # I need just the number
+            if type(boardId[b]) == int:
+                bn =boardId[b] # I need just the number
                # count how many hits 
                 weight=0
                 for bid in boardArr:
                     if bid == bn:
                         weight = weight +1
 
-                hHitsPerBoard.Fill(boardId[b],weight)
+                hHitsPerBoard.Fill(f"board_{boardId[b]}",weight)
             #if there are multiple boards:
             else:
                 #for each board:
                 for d in range(0,len(boardId[b])):
-                    bn = int(boardId[b][d].strip("board_")) # I need just the number
+                    bn = boardId[b][d] # I need just the number
                     # count how many hits 
                     weight=0
                     for bid in boardArr:
                         if bid == bn:
                             weight = weight +1
 
-                    hHitsPerBoard.Fill(boardId[b][d],weight)
+                    hHitsPerBoard.Fill(f"board_{boardId[b][d]}",weight)
 
         h.iArr[iNext] += 1
 

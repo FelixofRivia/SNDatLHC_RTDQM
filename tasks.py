@@ -40,7 +40,7 @@ def setBeamParam(beammode):
         h.rateBinwidth = 30
         h.timeRange = 300
         h.rateUpdate = 50000
-        h.updateIndex = 50000
+        h.updateIndex = 1000
     elif beammode in 'squeeze' or beammode in 'flat top':
         h.rateBinwidth = 60
         h.timeRange = 600
@@ -265,14 +265,16 @@ def getMultislot(type):
             #write slots, and names to each board
             boardSlots.append(slotArray)
             boardName.append(f"{type}_{L}")
-            boardId.append(f"board_{boards[i]}")
+            #boardId.append(f"board_{boards[i]}") #old
+            boardId.append(boards[i]) #new 
             #boardId.append(boardIdArray)
             panelName.append(sameNameArray)
             #grab the first number for naming
             #boardName.append(boardNameArray)
             h.totSlot.append(slotArray)
             h.totName.append(f"{type}_{L}")
-            h.totId.append(f"board_{boards[i]}")
+            #h.totId.append(f"board_{boards[i]}") #old 
+            h.totId.append(boards[i]) #new 
             h.totPName.append(sameNameArray)
     return boardId,boardName,panelName,boardSlots
 
@@ -311,13 +313,15 @@ def getMultiboard(type):
             #    name = boardName[]
             panelName.append(f"{type}_{j0}{j1}")
             h.totName.append(f"{type}_{j0}{j1}")
-            boardArray = []
+            #boardArray = []
             #add boards per panel e.g. scifi1y has 3 boards
+            """
             for b in boards:
                 boardArray.append(f"board_{b}")
+            """
             #add the boards to each unique panel name
-            boardId.append(boardArray)
-            h.totId.append(boardArray)
+            boardId.append(boards)
+            h.totId.append(boards)
         #make names for each subpanel corresponding to the board
         nameLength = len(boards)
         subPanelNameArray = []
