@@ -40,7 +40,7 @@ def setBeamParam(beammode):
         h.rateBinwidth = 30
         h.timeRange = 300
         h.rateUpdate = 50000
-        h.updateIndex = 1000
+        h.updateIndex = 50000
     elif beammode in 'squeeze' or beammode in 'flat top':
         h.rateBinwidth = 60
         h.timeRange = 600

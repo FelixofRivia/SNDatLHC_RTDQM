@@ -226,7 +226,7 @@ def plotHitsChannel(canvasName,boardNumber):
             h.readingTree = False
             continue
         
-        boardID = np.uint64(h.myDir.board_id)
+        boardID = np.uint8(h.myDir.board_id)
         #Check if the selected board is hit
         if boardNumber not in boardID:
             h.iArr[iNext] += 1
@@ -234,7 +234,7 @@ def plotHitsChannel(canvasName,boardNumber):
             continue
 
         tofChannel = np.uint8(h.myDir.tofpet_channel)
-        tofID = np.uint64(h.myDir.tofpet_id)
+        tofID = np.uint8(h.myDir.tofpet_id)
         h.readingTree = False #-------------------------------------------------end flag
 
         # check if array lenght is the same 
@@ -377,6 +377,107 @@ def plotHitsBoard(canvasName, boardId, boardName):
                             weight = weight +1
 
                     hHitsPerBoard.Fill(f"board_{boardId[b][d]}",weight)
+
+        h.iArr[iNext] += 1
+
+###################################################################################
+########################## Plot Hits per plane ####################################
+###################################################################################
+def plotHitsPlane(canvasName, boardId, detPName, detSlot):
+
+    eventStart = h.eventStart
+    iupdate = h.updateIndex
+        
+    #initialize canvas and histograms
+    hHitsPerPlane = TH1D(f"{canvasName}HitsPerPlane",f"{canvasName} Hits per plane",len(boardId),0,len(boardId))
+    hits_per_plane = TCanvas(f"{canvasName}_hits_per_plane","hitsPerPlane",800,400)
+    hHitsPerPlane.SetMinimum(0)
+    hHitsPerPlane.GetXaxis().SetTitle("plane")
+    hHitsPerPlane.GetYaxis().SetTitle("hits")
+    hHitsPerPlane.SetFillColor(38)
+    gStyle.SetOptStat("ne")
+
+    #initialize plot
+    for b in range(len(detPName)):  
+        for d in range(len(detPName[b])):
+            hHitsPerPlane.Fill(detPName[b][d],0)
+    
+    run = True
+    i = eventStart
+    iNext = len(h.iArr)
+    h.iArr.append(i)
+
+
+    while(run):
+        i = h.iArr[iNext]
+        if(i >= h.eventEnd):
+            hHitsPerPlane.Draw("bar hist") 
+            # add evt number
+            hHitsPerPlane.SetTitle(f"{canvasName} Hits per Plane: evt {i}")
+            hits_per_plane.Modified()
+            hits_per_plane.Update()
+            # save on root file
+            task.wrthisto(hHitsPerPlane, f"{canvasName}_Hits_per_plane")
+
+            if i == 999999:
+                print(f"{canvasName}_Hits_per_plane event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
+            #if end of a set range
+            elif h.isSetRange == True:
+                print("end of range. Stopping loop...")
+                exit()
+
+        #update histograms
+        if i%iupdate == 0:
+            print(f"{canvasName}_Hits_per_plane event number : {i}",flush=True)
+            hHitsPerPlane.Draw("bar hist") 
+            # add evt number
+            hHitsPerPlane.SetTitle(f"{canvasName} Hits per Plane: evt {i}")
+            hits_per_plane.Modified()
+            hits_per_plane.Update()
+            # save on root file
+            #task.wrtcanvas(hits_per_board, f"{canvasName}_hits_per_board.png")
+            task.wrthisto(hHitsPerPlane, f"{canvasName}_Hits_per_plane")
+
+        # wait for reader 
+        while(h.iRead<=i):
+            t.sleep(5)
+
+        #while sharing a value with rate or another thread
+        read.avoidOverlap(i,iNext)
+
+        while(h.readingTree):
+            t.sleep(.005)
+        h.readingTree = True #--------------------------------------------start flag
+
+        # load in value. If invalid (<= 0), discard
+        bb = h.myDir.GetEntry(i)
+        if bb <= 0:
+            h.iArr[iNext] += 1
+            h.readingTree = False
+            continue
+
+        nhits = h.myDir.n_hits
+        if nhits <= 0:
+            h.iArr[iNext] += 1
+            h.readingTree = False
+            continue
+
+        # load all hit boards 
+        boardArr=np.uint8(h.myDir.board_id)
+        tofID = np.uint64(h.myDir.tofpet_id)
+        h.readingTree = False #----------------------------------------end flag
+
+        #for each set of boards
+        for b in range(0,len(boardId)):
+            for d in range(0,len(boardArr)):
+                if boardArr[d] == boardId[b]:
+                    for s in range(0,len(detSlot[b])):
+                        if tofID[d] in detSlot[b][s]:
+                            hHitsPerPlane.Fill(detPName[b][s],1)
+
 
         h.iArr[iNext] += 1
 
