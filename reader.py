@@ -21,8 +21,6 @@ def readEntry():
         if i == 999999:
             print("event = 999999. End of file.", flush=True)
             task.updateFileNumber()
-            # after new file
-            #t.sleep(10)
             while(True):
                 if (0 in h.iArr or h.i==0):
                     t.sleep(3)
@@ -76,7 +74,7 @@ def readEntry():
                 # h.myDir.Refresh()
                 # h.file.ReadKeys()
                 h.readingTree=False
-                #gDirectory.ReadKeys()
+                # gDirectory.ReadKeys()
 
                 if h.myDir.GetEntriesFast() - 1 > h.eventEnd:
                     h.eventEnd = h.myDir.GetEntriesFast() - 1
@@ -90,10 +88,13 @@ def readEntry():
 def avoidOverlap(i,iNext):
     #while sharing a value with rate or another thread
     while(i > h.i):   
-        t.sleep(3)
+        t.sleep(5)
         
         
 # def avoidOverlap(i,iNext):
 #     #while sharing a value with rate or another thread
 #     while(i == h.i or (h.iArr.count(i)>1 and i>0)):
-#         t.sleep(iNext*.5)
+#         if i == h.i:
+#             t.sleep(1)
+#         else:
+#             t.sleep(iNext*.05)

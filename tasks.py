@@ -1,4 +1,3 @@
-from wsgiref.headers import tspecials
 from ROOT import TH1D, TCanvas, TFile, gDirectory, TDirectoryFile
 import header as h
 import time as t
@@ -77,7 +76,6 @@ def updateSecondsAgo(secAgo):
 
     #get the latest timestamp, set latest event
     reopenFile()
-    print("tasks accessing myVar")
     myVar = gDirectory.Get('data')
     h.eventEnd = myVar.GetEntriesFast() - 1
     var = myVar.GetEntry(h.eventEnd)

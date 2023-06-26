@@ -107,6 +107,3 @@ def main():
                 # save on root file
                 task.wrthisto(hLumi, "Lumi")
 
-#if __name__=="__main__":
-#    #global LumiAtlas, AtlasTime,LumiAlice,AliceTime,IsAtlas
-#    main()

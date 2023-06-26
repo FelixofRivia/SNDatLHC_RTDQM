@@ -48,8 +48,7 @@ def plotGlobalEvtRate():
         i = h.i
         #update
         if i%iupdate == 0:
-            print(f"TOT_Rate event number : {i}",flush=True)
-            print(t.perf_counter()-startT, flush=True)
+            print(f"TOT_Rate event number : {i}, Timer = {t.perf_counter()-startT}",flush=True)
             #print(h.iArr,flush=True)
             globalRate.cd(1)
             hRate.Draw("hist")
@@ -81,7 +80,7 @@ def plotGlobalEvtRate():
             task.wrthisto(hRateNorm, "TOT_Rate_norm")
             #if end of file, print out and end thread
             if i == 999999:
-                print("TOT_Rate event number = 999999. End of file.") 
+                print(f"TOT_Rate event number = 999999. End of file. Timer = {t.perf_counter()-startT}", flush=True) 
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.i
@@ -96,9 +95,9 @@ def plotGlobalEvtRate():
         
         #check to see if tree is being read. Put up flag while reading
         while(h.readingTree == True):
-            t.sleep(.005)
+            t.sleep(0)
         h.readingTree = True #------------------------------------------------------start flag
-
+        #h.lock.acquire()
         #load in value. If invalid (<= 0), discard
         nb = h.myDir.GetEntry(i)
         if nb <= 0:
@@ -108,6 +107,7 @@ def plotGlobalEvtRate():
 
         #grab value and copy locally
         ts = h.myDir.evt_timestamp
+        #h.lock.release()
         h.readingTree = False #------------------------------------------------------end flag
         time = (ts - t0)
 
@@ -153,7 +153,7 @@ def plotGlobalEvtRate():
 ###################################################################################
 def plotBoardHitRate(canvasName,boardNumber):
     board = "board_" + str(boardNumber)
-    
+    startT = t.perf_counter()
     t0 = h.t0
     run = True
     stuck = 0
@@ -186,7 +186,7 @@ def plotBoardHitRate(canvasName,boardNumber):
 
         #update
         if i%iupdate == 0:
-            print(f"{canvasName}_Rate event number : {i}",flush=True)
+            print(f"{canvasName}_Rate event number : {i}, , Timer = {t.perf_counter()-startT}",flush=True)
             boardRate.cd(1)
             hBoardRate.Draw("hist")
             boardRate.cd(2)
@@ -217,7 +217,7 @@ def plotBoardHitRate(canvasName,boardNumber):
 
             #if end of file, exit
             if i == 999999:
-                print(f"{canvasName}_Rate event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Rate event number : 999999. End of file. Timer = {t.perf_counter()-startT}",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]
@@ -289,8 +289,8 @@ def plotBoardHitRate(canvasName,boardNumber):
            # print(f"{canvasName} set t0 = {t0/tps} s",flush=True)
             
 
-def plotDetEvtRate(canvasName,boardId):
-
+def plotDetHitRate(canvasName,boardId):
+    startT = t.perf_counter()
     bId=[] # array with selected boards 
 
     for b in range(0,len(boardId)):
@@ -337,7 +337,7 @@ def plotDetEvtRate(canvasName,boardId):
 
         #update
         if i%iupdate == 0:
-            print(f"{canvasName}_Rate event number : {i}",flush=True)
+            print(f"{canvasName}_Rate event number : {i}, Timer = {t.perf_counter()-startT}",flush=True)
             boardRate.cd(1)
             hBoardRate.Draw("hist")
             boardRate.cd(2)
@@ -368,7 +368,7 @@ def plotDetEvtRate(canvasName,boardId):
 
             #if end of file, exit
             if i == 999999:
-                print(f"{canvasName}_Rate event number : 999999. End of file",flush=True)
+                print(f"{canvasName}_Rate event number : 999999. End of file. Timer = {t.perf_counter()-startT}",flush=True)
                 while(h.waitingEnd):
                     t.sleep(1)
                 i = h.iArr[iNext]

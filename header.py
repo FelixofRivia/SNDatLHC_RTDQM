@@ -1,6 +1,4 @@
 from ROOT import TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TGraph
-import ROOT
-import json
 import numpy as np
 
 
@@ -39,14 +37,15 @@ plotWholeRate = False #plot the whole file or just the specified range
 isSetRange = False #do not try to get new events
 
 #initialize a file
-filename = '/home/sndmon/Snd/Data/run_004208/data_0001.root'
-filedir = '/home/sndmon/Snd/Data/'
+filename = ''
+filedir = ''
 file = TFile()
 wrtfilename = "graphs.root"
 wrtfile = TFile()
 myDir = gDirectory.Get('data')
 fileN = 0
 runN = 0
+
 
 totName = []
 totPName = []
