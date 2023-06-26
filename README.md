@@ -62,8 +62,8 @@ The project is divided in the following way:
 The title of the plots contains the last updated event number from the data file.
 ### Event rate
 <p float="left">
-  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/df23e150-90f0-4004-bde5-5a6e92acde57" width="500" />
-  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/932f1fda-a4ff-406e-9e52-8bc198d91cbd" width="500" /> 
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/e2d8411f-27c8-4b55-860d-f16eaf4650ac" width="500"/>
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/4be0f723-b682-4124-9e99-2313ad142c96" width="500"/>
 </p>
 
 ### Luminosity
@@ -81,8 +81,7 @@ The title of the plots contains the last updated event number from the data file
 <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/88dad5b3-05ee-4fee-b51d-1fb92e411757" width="600"/>
 
 ### 2D hit map
-<img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/1cb2470f-b024-4005-ab1c-7cecb28a2374" width="500"/>
-
+<img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/39d7ab37-8f26-4469-8efb-434d01215c81" width="500"/>
 
 ## Dependencies
 This project is developed in a Python 3.8 environment, using the following modules:
