@@ -1,0 +1,140 @@
+# snd Veto, two slots, left and right
+# snd scifi, three boards, from channel 0 to 1536
+# snd us, two slots, left and right
+# snd dsh, two slots, left and right
+# snd dsv, one slot
+
+[veto.1]
+class = 'multislot'
+type = 'snd_veto'
+board = 58
+slots = ['D', 'A']
+
+[veto.2]
+class = 'multislot'
+type = 'snd_veto'
+board = 58
+slots = ['C', 'B']
+
+[scifi.1x]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [11, 17, 28]
+
+[scifi.1y]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [29, 3, 30]
+
+[scifi.2x]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [23, 2, 25]
+
+[scifi.2y]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [16, 14, 18]
+
+[scifi.3x]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [22, 27, 4]
+
+[scifi.3y]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [15, 9, 5]
+
+[scifi.4x]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [8, 50, 49]
+
+[scifi.4y]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [46, 40, 20]
+
+[scifi.5x]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [21, 10, 6]
+
+[scifi.5y]
+class = 'multiboard'
+type = 'snd_scifi'
+boards = [19, 13, 36]
+
+[us.1]
+class = 'multislot'
+type = 'snd_us'
+board = 7
+slots = ['D', 'A']
+
+[us.2]
+class = 'multislot'
+type = 'snd_us'
+board = 7
+slots = ['C', 'B']
+
+[us.3]
+class = 'multislot'
+type = 'snd_us'
+board = 60
+slots = ['D', 'A']
+
+[us.4]
+class = 'multislot'
+type = 'snd_us'
+board = 60
+slots = ['C', 'B']
+
+[us.5]
+class = 'multislot'
+type = 'snd_us'
+board = 52
+slots = ['C', 'B']
+
+[ds.1h]
+class = 'multislot'
+type = 'snd_dsh'
+board = 41
+slots = ['D', 'A']
+
+[ds.1v]
+class = 'multislot'
+type = 'snd_dsv'
+board = 41
+slots = ['B']
+
+[ds.2h]
+class = 'multislot'
+type = 'snd_dsh'
+board = 35
+slots = ['D', 'A']
+
+[ds.2v]
+class = 'multislot'
+type = 'snd_dsv'
+board = 35
+slots = ['B']
+
+[ds.3h]
+class = 'multislot'
+type = 'snd_dsh'
+board = 55
+slots = ['D', 'A']
+
+[ds.3v]
+class = 'multislot'
+type = 'snd_dsv'
+board = 55
+slots = ['B']
+
+[ds.4v]
+class = 'multislot'
+type = 'snd_dsv'
+board = 55
+slots = ['C']
+
