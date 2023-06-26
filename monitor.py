@@ -6,15 +6,15 @@ import ROOT
 import os
 import time as t
 
-import header as h
-import tasks as task
-import ratePlots as r
-import hitPlots as hit
-import hitMaps as map
-import luminosity as lum
-import reader as read
-import valuePlots as val
-import timeAlign as align
+import Scripts.header as h
+import Scripts.tasks as task
+import Scripts.ratePlots as r
+import Scripts.hitPlots as hit
+import Scripts.hitMaps as map
+import Scripts.luminosity as lum
+import Scripts.reader as read
+import Scripts.valuePlots as val
+import Scripts.timeAlign as align
 
 
 if __name__ == '__main__':
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     #rateVeto.start() 
     #rateSciFi.start() 
     #rateUS.start() 
-    rateDS.start()
+    #rateDS.start()
     #rateBM.start()
     
     #hitsTot.start()
@@ -130,16 +130,16 @@ if __name__ == '__main__':
     #BMCh.start() 
 
     #hitMap.start()
-    #valDS.start()
+    valDS.start()
     #valUS.start()
     #alignUS.start()
 
-    #planeUS.start()
+    planeUS.start()
     #planeDS.start()  
     #planeSciFi.start()
 
     #if "stable" in args.beammode:
-    lumi.start()
+    #lumi.start()
 
     #rate should ALWAYS be running!
     rate.start()
