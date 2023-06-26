@@ -42,6 +42,7 @@ Where:
 - fileNumber is the desired starting file within a run (the first one is 0);
 - beamMode is a string describing the status of the beam, used to select the most appropriate plotting parameters;
 
+To kill program, enter Ctrl+\.
 
 ## Structure of the project
 The project is divided in the following way:
