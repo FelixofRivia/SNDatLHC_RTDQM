@@ -40,12 +40,12 @@ The monitor can be called using
 Where:
 - runNumber is an integer representing the desired run number; 
 - fileNumber is the desired starting file within a run (the first one is 0);
-- the beamMode is a string describing the status of the beam, used to select the most appropriate plotting parameters;
+- beamMode is a string describing the status of the beam, used to select the most appropriate plotting parameters;
 
 
 ## Structure of the project
 The project is divided in the following way:
-- **monitor.py**:  the main scripts which initializes all parameters and creates threads;
+- **monitor.py**:  the main script which initializes all parameters and creates threads;
 - **board_mapping.json**: configuration file for the DAQ boards mapping to detector subsystems;
 - **luminosity.py**: script plotting luminosity in real time provided by ATLAS (feature not available outside SND@LHC monitoring machine);
 - **task.py**: script with utility functions used by threads;
@@ -76,7 +76,7 @@ The title of the plots contains the last updated event number from the data file
 ### QDC value
 <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/1a8f9f8d-d0cb-4cf2-bfb5-ae1a33dfe17f" width="600"/>
 
-### Time allignment
+### Time alignment
 <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/88dad5b3-05ee-4fee-b51d-1fb92e411757" width="600"/>
 
 ### 2D hit map
@@ -84,7 +84,7 @@ The title of the plots contains the last updated event number from the data file
 
 
 ## Dependencies
-This project is developed in a python 3.8 environment, using the following modules:
+This project is developed in a Python 3.8 environment, using the following modules:
 - ROOT
 - numpy
 - argparse
@@ -93,3 +93,6 @@ This project is developed in a python 3.8 environment, using the following modul
 - time
 - json
 - math
+There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only on the SND@LHC monitoring machine:
+- pydim
+- fcntl
