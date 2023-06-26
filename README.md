@@ -94,6 +94,7 @@ This project is developed in a Python 3.8 environment, using the following modul
 - time
 - json
 - math
+
 There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only on the SND@LHC monitoring machine:
 - pydim
 - fcntl
