@@ -70,7 +70,7 @@ The title of the plots contains the last updated event number from the data file
 ### Hits per channel/board/plane
 <p float="left">
   <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/d65e3303-c76d-4031-a589-6d9fef9d848b" width="300" height="450"/>
-  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/38502e6e-6714-47ee-bb8b-9557757564cc" width="500" height="400"/> 
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/6c6c6982-effe-4cb7-a75a-6f2d8c888242" width="500" height="400"/> 
 </p>
 
 ### QDC value
