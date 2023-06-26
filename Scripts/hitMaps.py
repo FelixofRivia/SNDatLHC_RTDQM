@@ -1,9 +1,9 @@
 from ROOT import TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TH2D
 import numpy as np
 import time as t
-import header as h
-import reader as read
-import tasks as task
+import Scripts.header as h
+import Scripts.reader as read
+import Scripts.tasks as task
 
 def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,canvasIndex):
 
@@ -14,7 +14,7 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
     iupdate = h.updateIndex
 
     #grab their channels
-    xBins = 64*len(xtofIDs)#512 #64*8, but can be done better (select only needed channels, as in boardrate)
+    xBins = 64*len(xtofIDs)
     yBins = 64*len(ytofIDs)
     #make 2Dhist assigned with channels
     hitMap = TH2D(str(canvasName) + "HitsPerChannel" + str(canvasIndex),str(canvasName) + " nHits per channel",xBins,0,xBins,yBins,0,yBins)
@@ -28,6 +28,9 @@ def plot2DMap(xBoardNumber,yBoardNumber,xtofIDs,ytofIDs,canvasName,nCanvases,can
     canvas = TCanvas(canvasName + "_hits_per_channel",str(canvasName) + "HitsPerChannel",500*xCanv,500*yCanv)
     canvas.Divide(xCanv,yCanv)
     canvas.cd(canvasIndex)
+
+    hitMap.GetXaxis().SetTitle("x channels")
+    hitMap.GetYaxis().SetTitle("y channels")
 
     run = True
     i = eventStart

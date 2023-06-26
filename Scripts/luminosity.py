@@ -1,8 +1,8 @@
 from ROOT import TH1D, TCanvas, TFile, gDirectory, gSystem
 import ROOT
-import header as h
-import tasks as task
-import ratePlots as r
+import Scripts.header as h
+import Scripts.tasks as task
+import Scripts.ratePlots as r
 #source ~/snd.sh
 
 ###################################################################################

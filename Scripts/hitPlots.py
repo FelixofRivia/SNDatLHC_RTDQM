@@ -1,11 +1,11 @@
 from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle
 import numpy as np
 import time as t
-import header as h
-import tasks as task
+import Scripts.header as h
+import Scripts.tasks as task
 import math
 import ROOT
-import reader as read
+import Scripts.reader as read
 
 hArrUSHitsPerCh = []
 hArrDSHitsPerCh = []
