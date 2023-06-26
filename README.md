@@ -7,8 +7,8 @@ The project is concluded. However, it will receive updates in the future with ne
 - the luminosity provided by ATLAS;
 - the hits per channel/board/station;
 - the QDC value measured by SiPMs in each station;
-- the time alignement between boards;
-- 2D hit plot of a XY plane.
+- the time alignment between boards;
+- 2D hit plot of an XY plane.
 
 The produced plots are saved in a ROOT file (plots.root) and are shown in real-time locally on canvases (can be disabled), refreshed every certain number of events (depending on the beam status). 
 The plots produced by the machine running the monitoring script for the SND@LHC experiment are also shown live on the web page https://sndonline.web.cern.ch/rtdqm.html (must login with a CERN account).
@@ -25,11 +25,9 @@ The plots produced by the machine running the monitoring script for the SND@LHC 
 
 
 ## General Information
-SND@LHC (Scattering and Neutrino Detector at the LHC) was designed to perform measurements with high-energy neutrinos (100 GeV to a few TeV) produced at the LHC in the pseudo-rapidity region 7.2 < η < 8.4. SND@LHC is a compact, standalone experiment located in the TI18 tunnel (480 m downstream of the ATLAS interaction point, IP1) and it allows for the identification of all three flavours of neutrino interactions with high efficiency. The SND@LHC detector consists of a hybrid system with a ∼ 830 kg target made of tungsten plates interleaved with nuclear emulsion and electronic trackers (scintillating fibers, SciFi), followed by a hadronic calorimeter and a muon identification system.
+SND@LHC (Scattering and Neutrino Detector at the LHC) was designed to perform measurements with high-energy neutrinos (100 GeV to a few TeV) produced at the LHC in the pseudo-rapidity region 7.2 < η < 8.4. SND@LHC is a compact, standalone experiment located in the TI18 tunnel (480 m downstream of the ATLAS interaction point, IP1) and it allows for the identification of all three flavors of neutrino interactions with high efficiency. The SND@LHC detector consists of a hybrid system with a ∼ 830 kg target made of tungsten plates interleaved with nuclear emulsion and electronic trackers (scintillating fibers, SciFi), followed by a hadronic calorimeter and a muon identification system.
 
-The RTDQM is a multi-threaded python software, with a main script creating and managing threads monitoring and plotting data (using pyROOT) from different detector subsystems and luminosity provided by ATLAS. The structure is modular by design, allowing to add (or remove) monitoring plot. Moreover the structure of the detector and the DAQ boards mapping is read from a configuration file which can be easily swapped, resulting in an especially flexible tool. When a data taking run begins, the SND@LHC Online System starts the RTDQM, which is able to run independently and wait for new data to update the plots.
-
-DAQ boards mapping is read from a configuration file which can be easily swapped, resulting in an especially flexible tool. 
+The RTDQM is a multi-threaded Python software, with a main script creating and managing threads monitoring and plotting data (using pyROOT) from different detector subsystems and luminosity provided by ATLAS. The structure is modular by design, allowing for the addition (or removal) of monitoring plots. Moreover, the structure of the detector and the DAQ boards mapping is read from a configuration file that can be easily swapped, resulting in an especially flexible tool. When a data taking run begins, the SND@LHC Online System starts the RTDQM, which is able to run independently and wait for new data to update the plots.
 
 
 ## Usage
@@ -60,11 +58,38 @@ The project is divided in the following way:
 
 
 ## Output
+The title of the plots contains the last updated event number from the data file.
+### Event rate
+<p float="left">
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/df23e150-90f0-4004-bde5-5a6e92acde57" width="500" />
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/932f1fda-a4ff-406e-9e52-8bc198d91cbd" width="500" /> 
+</p>
 
-#### Instantaneous rate
+### Luminosity
 
+### Hits per channel/board/plane
+<p float="left">
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/d65e3303-c76d-4031-a589-6d9fef9d848b" width="400" height="600"/>
+  <img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/38502e6e-6714-47ee-bb8b-9557757564cc" width="600" height="400"/> 
+</p>
 
-#### Luminosity
+### QDC value
+<img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/1a8f9f8d-d0cb-4cf2-bfb5-ae1a33dfe17f" width="600"/>
+
+### Time allignment
+<img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/88dad5b3-05ee-4fee-b51d-1fb92e411757" width="600"/>
+
+### 2D hit map
+<img src="https://github.com/FelixofRivia/SND-LHCdqm/assets/67705874/1cb2470f-b024-4005-ab1c-7cecb28a2374" width="500"/>
 
 
 ## Dependencies
+This project is developed in a python 3.8 environment, using the following modules:
+- ROOT
+- numpy
+- argparse
+- threading
+- os
+- time
+- json
+- math
