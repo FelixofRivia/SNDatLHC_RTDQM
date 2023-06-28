@@ -48,7 +48,7 @@ To kill program, enter Ctrl+\\.
 The project is divided in the following way:
 - **monitor.py**:  the main script which initializes all parameters and creates threads;
 - **board_mapping.json**: configuration file for the DAQ boards mapping to detector subsystems;
-- **luminosity.py**: script plotting luminosity in real time provided by ATLAS (feature not available outside SND@LHC monitoring machine);
+- **luminosity.py**: script plotting the luminosity of ATLAS provided by pydim in real time (feature not available outside CERN network);
 - **task.py**: script with utility functions used by threads;
 - **reader.py**: loads the desired file with the event tree and loops through the events. Whenever the code runs out of events, it tries to update the file and (if more events are present) resumes where it left off. This allows the code to read an active file;
 - **ratePlots.py**: file with functions used to plot event/hit rate;
@@ -95,5 +95,5 @@ This project is developed in a Python 3.8 environment, using the following modul
 - json
 - math
 
-There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only on the SND@LHC monitoring machine:
+There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only inside CERN network:
 - pydim
