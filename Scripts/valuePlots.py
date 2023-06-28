@@ -3,7 +3,6 @@ import numpy as np
 import time as t
 import Scripts.header as h
 import Scripts.tasks as task
-import ROOT
 import Scripts.reader as read
 
 def plotValueBoard(canvasName, boardId):

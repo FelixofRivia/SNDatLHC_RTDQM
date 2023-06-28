@@ -1,7 +1,5 @@
-#from pyexpat.errors import XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING
 from ROOT import TH1D, TH1F, TCanvas,TFile, gROOT, gDirectory, gSystem, TH2D, gStyle
 import numpy as np
-import array
 import time as t
 import Scripts.header as h
 import Scripts.reader as read

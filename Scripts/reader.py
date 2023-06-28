@@ -1,14 +1,13 @@
 from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle
 import time as t
-import ROOT
 import Scripts.header as h
 import Scripts.tasks as task
 import numpy as np
 import sys
 import os
 
-def readEntry():
 
+def readEntry():
     #holder = sys.stdout
 
     while(h.updatingFile):
@@ -98,3 +97,4 @@ def avoidOverlap(i,iNext):
 #             t.sleep(1)
 #         else:
 #             t.sleep(iNext*.05)
+

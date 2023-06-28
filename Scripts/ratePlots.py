@@ -1,4 +1,4 @@
-from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle
+from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle, TH1
 import time as t
 import ROOT
 import Scripts.header as h
@@ -12,11 +12,8 @@ import Scripts.reader as read
 ###################################################################################
 def plotGlobalEvtRate():
     startT = t.perf_counter()
-    #global plots are used by lumi function
-    global hRate, hRateNorm
-
     #initialize variables
-
+    TH1.AddDirectory(False)
     t0 = h.t0
     run = True
 
@@ -29,6 +26,9 @@ def plotGlobalEvtRate():
     hRate = TH1D("hRate",f"Total Events per {binwidth} s",int(h.timeRange/binwidth)+1,0,h.timeRange)
     hRateNorm = TH1D("hRateNorm","Events per second",int(h.timeRange/binwidth)+1,0,h.timeRange)
     gStyle.SetOptStat("ne") #only plots hist name and n entries
+
+    hRate.SetDirectory(ROOT.nullptr)
+    hRateNorm.SetDirectory(ROOT.nullptr)
 
     hRate.GetXaxis().SetTitle("time (s)")
     hRate.GetYaxis().SetTitle(f"events per {binwidth} s")

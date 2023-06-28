@@ -3,6 +3,12 @@ import Scripts.header as h
 import time as t
 import ROOT
 import json
+import os
+import signal
+
+def signal_handler(signum, frame):
+    print("segfault",flush=True)
+
 
 def updateFileNumber():    # for online data only
     h.fileN += 1
@@ -31,23 +37,28 @@ def wrthisto(histo, name):
 
 def reopenFile():
     print("Reopen file", flush=True)
-    h.file.Close()
+    try:
+        h.file.Close()
+    except:
+        print("Error while closing", flush= True)
     h.file = ROOT.TFile.Open(h.filename,'r')
 
 def setBeamParam(beammode):
     if beammode in 'stable beams':
         h.rateBinwidth = 30
         h.timeRange = 300
-        h.rateUpdate = 50000
-        h.updateIndex = 50000
+        h.rateUpdate = 20000
+        h.updateIndex = 20000
     elif beammode in 'squeeze' or beammode in 'flat top':
         h.rateBinwidth = 60
         h.timeRange = 600
-        h.rateUpdate = 10000
+        h.rateUpdate = 30000
+        h.updateIndex = 30000
     elif beammode in 'ramp up':
         h.rateBinwidth = 60
         h.timeRange = 3600
-        h.rateUpdate = 50000
+        h.rateUpdate = 30000
+        h.updateIndex = 30000
     elif beammode in 'testbeam':
         h.rateBinwidth = 10
         h.timeRange = 200
@@ -57,7 +68,8 @@ def setBeamParam(beammode):
     else:
         h.rateBinwidth = 180
         h.timeRange = 6000
-        h.rateUpdate = 500
+        h.rateUpdate = 1000
+        h.updateIndex = 1000
 
 
 ####functions to be called in main to initialize eventEnd, eventStart, and eventRange:
@@ -175,7 +187,7 @@ def updateAllEvents():
 ##functions to get board info from json file
 
 def getMultislot(type):
-    f = open("board_mapping.json")
+    f = open("board_mapping_local.json")
     data = json.load(f)
 
     panelName = []
@@ -278,7 +290,7 @@ def getMultislot(type):
 
 def getMultiboard(type):
     #open file
-    f = open("board_mapping.json")
+    f = open("board_mapping_local.json")
     data = json.load(f)
 
     #initialize arrays
@@ -344,7 +356,7 @@ def getBoardArrays(beammode):
 
 
    # add back 
-   # h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
+    h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
     h.sciFiId, h.sciFiName, h.sciFiPName, h.sciFiSlot = getMultiboard("scifi")
     h.usId, h.usName, h.usPName, h.usSlot = getMultislot("us")
     h.dsId, h.dsName, h.dsPName, h.dsSlot = getMultislot("ds")

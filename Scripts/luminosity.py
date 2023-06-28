@@ -1,5 +1,4 @@
 from ROOT import TH1D, TCanvas, TFile, gDirectory, gSystem
-import ROOT
 import Scripts.header as h
 import Scripts.tasks as task
 import Scripts.ratePlots as r
@@ -11,8 +10,6 @@ import Scripts.ratePlots as r
 import pydim
 import sys
 import time as t
-from fcntl import DN_DELETE
-from math import log10
 import os
 
 LumiAtlas = 0 
@@ -79,8 +76,9 @@ def main():
     # Wait for updates
     while plotLumi:
         hLumi = TH1D("hLumi","Atlas Instant Lumi",int(h.timeRange/h.lumiBinWidth),0,h.timeRange)
-        LumiCanvas = TCanvas("LumiCanvas","LumiRate",600,1200)
-        LumiCanvas.Divide(1,2)
+        hLumi.GetXaxis().SetTitle("time (s)")
+        hLumi.GetYaxis().SetTitle("luminosity (Hz/ub)")
+        LumiCanvas = TCanvas("LumiCanvas","LumiRate",600,600)
         AtlasTime = 0
         IsAtlas   = True
         while True:
@@ -97,11 +95,7 @@ def main():
             
             
             if(AtlasTime%h.lumiBinWidth):
-                LumiCanvas.cd(1)
                 hLumi.Draw("hist")
-                LumiCanvas.cd(2)
-                rate = r.hRateNorm
-                rate.Draw()
                 LumiCanvas.Modified()
                 LumiCanvas.Update()
                 # save on root file

@@ -4,7 +4,6 @@ import time as t
 import Scripts.header as h
 import Scripts.tasks as task
 import math
-import ROOT
 import Scripts.reader as read
 
 hArrUSHitsPerCh = []
@@ -357,7 +356,7 @@ def plotHitsBoard(canvasName, boardId, boardName):
         for b in range(0,len(boardId)):
             #if there's just one board:
             if type(boardId[b]) == int:
-                bn =boardId[b] # I need just the number
+                bn =boardId[b] 
                # count how many hits 
                 weight=0
                 for bid in boardArr:
