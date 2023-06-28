@@ -5,6 +5,8 @@ import threading
 import ROOT
 import os
 import time as t
+import signal
+import sys
 
 import Scripts.header as h
 import Scripts.tasks as task
@@ -18,6 +20,7 @@ import Scripts.timeAlign as align
 
 
 if __name__ == '__main__':
+   # sys.stderr = open(os.devnull, "w")
     parser = argparse.ArgumentParser()
     parser.add_argument('runNumber', type=str)
     parser.add_argument('fileNumber', type=str)
@@ -62,6 +65,7 @@ if __name__ == '__main__':
     #plot events between arg1 and arg2 seconds ago
     #task.updateTimeRange(300,120)
 
+    TH1.AddDirectory(False)
 
     #enable root multithreading   
     nThreads = 6
@@ -93,6 +97,7 @@ if __name__ == '__main__':
     BMCh = threading.Thread(target=hit.plotHitsChDet, args=("BM",h.beammonId,h.beammonName))
 
     hitsTot = threading.Thread(target=hit.plotHitsBoard, args=("Total",h.totId,h.totName))
+    hitsVeto = threading.Thread(target=hit.plotHitsBoard, args=("Veto",h.vetoId,h.vetoName))
     hitsSciFi = threading.Thread(target=hit.plotHitsBoard, args=("SciFi",h.sciFiId,h.sciFiName))
     hitsUS = threading.Thread(target=hit.plotHitsBoard, args=("US",h.usId,h.usName))
     hitsDS = threading.Thread(target=hit.plotHitsBoard, args=("DS",h.dsId,h.dsName))
@@ -112,39 +117,40 @@ if __name__ == '__main__':
 
     #start threads
 
-    #rateVeto.start() 
-    #rateSciFi.start() 
-    #rateUS.start() 
-    #rateDS.start()
+    # rateVeto.start() 
+    # rateSciFi.start() 
+    # rateUS.start() 
+    # rateDS.start()
     #rateBM.start()
     
-    #hitsTot.start()
-    #hitsSciFi.start()
-    #hitsUS.start()
-    #hitsDS.start()
+   # hitsTot.start()
+   # hitsVeto.start()
+    # hitsSciFi.start()
+    # hitsUS.start()
+    # hitsDS.start()
     #hitsBM.start()
 
-    #vetoCh.start()
-    #sciFiCh.start()             
-    #usCh.start()
-    #dsCh.start()
+    vetoCh.start()
+    # sciFiCh.start()             
+    # usCh.start()
+    # dsCh.start()
     #BMCh.start() 
 
-    #hitMap.start()
-    valDS.start()
-    #valUS.start()
-    #alignUS.start()
+    # hitMap.start()
+    # valDS.start()
+    valUS.start()
+    # alignUS.start()
 
-    planeUS.start()
-    #planeDS.start()  
-    #planeSciFi.start()
+    # planeUS.start()
+    planeDS.start()  
+    # planeSciFi.start()
 
     #if "stable" in args.beammode:
-    #lumi.start()
+   # lumi.start()
 
     #rate should ALWAYS be running!
     rate.start()
-
+    #signal.signal(signal.SIGSEGV, task.signal_handler)
     while(True):
         if (gSystem.ProcessEvents()):
             break
