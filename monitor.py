@@ -24,7 +24,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('runNumber', type=str)
     parser.add_argument('fileNumber', type=str)
-    parser.add_argument('serverNumber',type=str)
+   # parser.add_argument('serverNumber',type=str)
     parser.add_argument('beammode',type=str)
     args = parser.parse_args()
 
@@ -34,7 +34,6 @@ if __name__ == '__main__':
     #make run (file) number 6 (4) digits , 0 padded
     runNumber = args.runNumber.rjust(6,"0")
     fileNumber = args.fileNumber.rjust(4,"0")
-    serverNumber = args.serverNumber.rjust(4,"0")
     beammode = args.beammode.lower()
     print(f"Beammode = {beammode} --------------------------",flush=True)
 
