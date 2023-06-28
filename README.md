@@ -4,7 +4,7 @@ Multi-threaded Python software for the online data quality monitor of the SND@LH
 ## Project Status
 The project is concluded. However, it will receive updates in the future with new features. The current version can plot:
 - the event rate, global or per board/station; 
-- the luminosity provided by ATLAS;
+- the luminosity of ATLAS provided by pydim;
 - the hits per channel/board/station;
 - the QDC value measured by SiPMs in each station;
 - the time alignment between boards;
@@ -67,6 +67,7 @@ The title of the plots contains the last updated event number from the data file
 </p>
 
 ### Luminosity
+<img src="https://github.com/FelixofRivia/SNDatLHC_RTDQM/assets/67705874/17c72114-8c8f-47a6-b5a7-b55532978f61" width="500"/>
 
 ### Hits per channel/board/plane
 <p float="left">
@@ -96,4 +97,3 @@ This project is developed in a Python 3.8 environment, using the following modul
 
 There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only on the SND@LHC monitoring machine:
 - pydim
-- fcntl
