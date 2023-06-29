@@ -3,11 +3,6 @@ import Scripts.header as h
 import time as t
 import ROOT
 import json
-import os
-import signal
-
-def signal_handler(signum, frame):
-    print("segfault",flush=True)
 
 
 def updateFileNumber():    # for online data only
