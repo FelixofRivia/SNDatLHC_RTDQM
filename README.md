@@ -95,5 +95,5 @@ This project is developed in a Python 3.8 environment, using the following modul
 - json
 - math
 
-There are additional modules needed for plotting luminosity provided by ATLAS but this feature is available only inside CERN network:
+There are additional modules needed for plotting the luminosity of ATLAS but this feature is available only inside CERN network:
 - pydim
