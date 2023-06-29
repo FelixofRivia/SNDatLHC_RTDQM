@@ -5,8 +5,6 @@ import threading
 import ROOT
 import os
 import time as t
-import signal
-import sys
 
 import Scripts.header as h
 import Scripts.tasks as task
@@ -20,7 +18,6 @@ import Scripts.timeAlign as align
 
 
 if __name__ == '__main__':
-   # sys.stderr = open(os.devnull, "w")
     parser = argparse.ArgumentParser()
     parser.add_argument('runNumber', type=str)
     parser.add_argument('fileNumber', type=str)
@@ -103,8 +100,9 @@ if __name__ == '__main__':
     hitsBM = threading.Thread(target=hit.plotHitsBoard, args=("BM",h.beammonId,h.beammonName))
 
     hitMap = threading.Thread(target=map.plot2DMap, args=(11,29,[0,1,2,3,5,6,7],[0,1,2,3,5,6,7],"SciFi_1_hitmap",1,1))
-    valDS = threading.Thread(target=val.plotValueBoard, args=("DS",h.dsId))
-    valUS = threading.Thread(target=val.plotValueBoard, args=("US",h.usId))
+    valDS1 = threading.Thread(target=val.plotValueBoardMS, args=("DS1",h.dsId[0],[0,1,6,7]))
+    valUS1 = threading.Thread(target=val.plotValueBoardMS, args=("US1",h.usId[0],[2,3]))
+    valScifi1x = threading.Thread(target=val.plotValueBoardMB, args=("SciFi1",h.sciFiId[0]))
     alignUS = threading.Thread(target=align.plotTimeAlign, args=("US",h.usId))
 
     planeUS = threading.Thread(target=hit.plotHitsPlaneMS, args=("US",h.usId,h.usPName, h.usSlot))
@@ -113,7 +111,6 @@ if __name__ == '__main__':
 
     #reader should ALWAYS be running!
     reader.start()   
-
     #start threads
 
     # rateVeto.start() 
@@ -136,8 +133,9 @@ if __name__ == '__main__':
     #BMCh.start() 
 
     # hitMap.start()
-    # valDS.start()
-    valUS.start()
+    # valDS1.start()
+    valUS1.start()
+   # valScifi1x.start()
     # alignUS.start()
 
     # planeUS.start()
@@ -149,7 +147,6 @@ if __name__ == '__main__':
 
     #rate should ALWAYS be running!
     rate.start()
-    #signal.signal(signal.SIGSEGV, task.signal_handler)
     while(True):
         if (gSystem.ProcessEvents()):
             break
