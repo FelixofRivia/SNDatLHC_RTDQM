@@ -6,7 +6,6 @@ import Scripts.tasks as task
 import Scripts.reader as read
 
 def plotValueBoardMB(canvasName, boardId):
-    eventEnd = h.eventEnd
     eventStart = h.eventStart
         
     #initialize canvas and histograms
@@ -25,7 +24,7 @@ def plotValueBoardMB(canvasName, boardId):
 
     while(run):
         i = h.iArr[iNext]
-        if(i >= eventEnd):
+        if(i >= h.eventEnd):
             hValues.Draw("bar hist")
             # add evt number
             hValues.SetTitle(f"{canvasName} Value: evt {i}")
@@ -111,7 +110,6 @@ def plotValueBoardMB(canvasName, boardId):
 
 
 def plotValueBoardMS(canvasName, boardId, tofpetId):
-    eventEnd = h.eventEnd
     eventStart = h.eventStart
         
     #initialize canvas and histograms
@@ -130,7 +128,7 @@ def plotValueBoardMS(canvasName, boardId, tofpetId):
 
     while(run):
         i = h.iArr[iNext]
-        if(i >= eventEnd):
+        if(i >= h.eventEnd):
             hValues.Draw("bar hist")
             # add evt number
             hValues.SetTitle(f"{canvasName} Value: evt {i}")

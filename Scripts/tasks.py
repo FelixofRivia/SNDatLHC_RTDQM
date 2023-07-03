@@ -1,4 +1,4 @@
-from ROOT import TH1D, TCanvas, TFile, gDirectory, TDirectoryFile
+from ROOT import TH1D, TH1, TCanvas, TFile, gDirectory, TDirectoryFile
 import Scripts.header as h
 import time as t
 import ROOT
@@ -34,11 +34,17 @@ def reopenFile():
     print("Reopen file", flush=True)
     try:
         h.file.Close()
+        h.file = ROOT.TFile.Open(h.filename,'r')
     except:
         print("Error while closing", flush= True)
-    h.file = ROOT.TFile.Open(h.filename,'r')
 
 def setBeamParam(beammode):
+    if beammode == 'test':
+        h.rateBinwidth = 30
+        h.timeRange = 300
+        h.rateUpdate = 1000
+        h.updateIndex = 1000
+        h.refreshRate = 5
     if beammode in 'stable beams':
         h.rateBinwidth = 30
         h.timeRange = 300

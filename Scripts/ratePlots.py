@@ -13,7 +13,6 @@ import Scripts.reader as read
 def plotGlobalEvtRate():
     startT = t.perf_counter()
     #initialize variables
-    TH1.AddDirectory(False)
     t0 = h.t0
     run = True
 
@@ -21,7 +20,7 @@ def plotGlobalEvtRate():
     tps = h.tsPerSec
     iupdate = h.rateUpdate
     
-
+    TH1.AddDirectory(False)
     #set hists
     hRate = TH1D("hRate",f"Total Events per {binwidth} s",int(h.timeRange/binwidth)+1,0,h.timeRange)
     hRateNorm = TH1D("hRateNorm","Events per second",int(h.timeRange/binwidth)+1,0,h.timeRange)

@@ -1,4 +1,4 @@
-from ROOT import TH1D, TCanvas,TFile, gDirectory, gSystem, gStyle
+from ROOT import TH1D,TH1, TCanvas,TFile, gDirectory, gSystem, gStyle
 import time as t
 import Scripts.header as h
 import Scripts.tasks as task
@@ -9,7 +9,7 @@ import os
 
 def readEntry():
     #holder = sys.stdout
-
+    #TH1.AddDirectory(False)
     while(h.updatingFile):
         t.sleep(10)
     h.myDir = gDirectory.Get('data')
@@ -63,22 +63,29 @@ def readEntry():
                 reopen = True
                 while (reopen):
                     task.reopenFile()
+                    t.sleep(10)
                     try:
-                        h.myDir = gDirectory.Get('data')
-                        reopen = False
+                        h.myDir = h.file.Get("data")
+                        if h.myDir is not None:
+                            reopen = False
+                        else:
+                            print("Directory is empty", flush=True)
                     except:
                         print("Failed to update file ... trying again", flush = True)
-                        t.sleep(3)
+                        t.sleep(15)
                 print("opened",flush=True)
                 # h.myDir.Refresh()
                 # h.file.ReadKeys()
-                h.readingTree=False
+                # h.readingTree=False
                 # gDirectory.ReadKeys()
+                try:
+                    if h.myDir.GetEntriesFast() - 1 > h.eventEnd:
+                        h.eventEnd = h.myDir.GetEntriesFast() - 1
+                        waiting = False
+                except:
+                    print("null ptr", flush=True)
 
-                if h.myDir.GetEntriesFast() - 1 > h.eventEnd:
-                    h.eventEnd = h.myDir.GetEntriesFast() - 1
-                    waiting = False
-
+                h.readingTree=False
                 print(f"eventEnd now = {h.eventEnd}", flush=True)
 
         i += 1
