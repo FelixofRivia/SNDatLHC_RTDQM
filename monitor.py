@@ -34,7 +34,7 @@ if __name__ == '__main__':
     beammode = args.beammode.lower()
     print(f"Beammode = {beammode} --------------------------",flush=True)
 
-
+    TH1.AddDirectory(False)
     #h.filedir = f"root://snd-server-1:1094///mnt/raid1/data_online/" #online
     #h.filedir = f"/home/sndmon/QtDqmp/Data/"   #local new
     #h.filedir = f"/home/sndmon/Snd/Data/"   #local old
@@ -48,7 +48,6 @@ if __name__ == '__main__':
     h.wrtfile.Close()
 
     h.file = ROOT.TFile.Open(h.filename,'r')
-    print(f"opening file first time: {h.filename}",flush=True)
 
     task.setBeamParam(beammode)
 
@@ -60,8 +59,6 @@ if __name__ == '__main__':
 
     #plot events between arg1 and arg2 seconds ago
     #task.updateTimeRange(300,120)
-
-    TH1.AddDirectory(False)
 
     #enable root multithreading   
     nThreads = 6
@@ -126,7 +123,7 @@ if __name__ == '__main__':
     # hitsDS.start()
     #hitsBM.start()
 
-    vetoCh.start()
+    #vetoCh.start()
     # sciFiCh.start()             
     # usCh.start()
     # dsCh.start()
