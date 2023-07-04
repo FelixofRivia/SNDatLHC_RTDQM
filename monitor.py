@@ -11,7 +11,7 @@ import Scripts.tasks as task
 import Scripts.ratePlots as r
 import Scripts.hitPlots as hit
 import Scripts.hitMaps as map
-import Scripts.luminosity as lum
+#import Scripts.luminosity as lum
 import Scripts.reader as read
 import Scripts.valuePlots as val
 import Scripts.timeAlign as align
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     #define threading functions
     reader = threading.Thread(target=read.readEntry)
     rate = threading.Thread(target=r.plotGlobalEvtRate)
-    lumi = threading.Thread(target=lum.main)
+    #lumi = threading.Thread(target=lum.main)
 
     rateVeto = threading.Thread(target=r.plotDetHitRate, args = ("Veto",h.vetoId))
     rateSciFi = threading.Thread(target=r.plotDetHitRate, args=("Scifi",h.sciFiId))
