@@ -21,6 +21,7 @@ The plots produced by the machine running the monitoring script for the SND@LHC 
 * [Structure of the project](#structure-of-the-project)
 * [Output](#output)
 * [Dependencies](#dependencies)
+* [Run with event simulator](#run-with-event-simulator)
 
 
 
@@ -98,9 +99,10 @@ This project is developed in a Python 3.8 environment, using the following modul
 There are additional modules needed for plotting the luminosity of ATLAS but this feature is available only inside CERN network:
 - pydim
 
-## Run with simulator
-If it is not possible to access the real SND@LHC data, a simple event simulator is available to test features of the RTDQM. To run with simulator
+## Run with event simulator
+If it is not possible to access the real SND@LHC data, a simple event simulator is available to test features of the RTDQM. To run with event simulator
 > user@host $  root simulate.C
+
 Then
 > user@host $  python3 monitor.py 5408 0 "test"
 
