@@ -45,6 +45,7 @@ wrtfile = TFile()
 myDir = gDirectory.Get('data')
 fileN = 0
 runN = 0
+confName = "board_mapping.json"
 
 
 totName = []

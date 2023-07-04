@@ -41,11 +41,11 @@ def reopenFile():
 def setBeamParam(beammode):
     if beammode == 'test':
         h.rateBinwidth = 30
-        h.timeRange = 300
+        h.timeRange = 600
         h.rateUpdate = 1000
         h.updateIndex = 1000
         h.refreshRate = 5
-    if beammode in 'stable beams':
+    elif beammode in 'stable beams':
         h.rateBinwidth = 30
         h.timeRange = 300
         h.rateUpdate = 20000
@@ -60,7 +60,7 @@ def setBeamParam(beammode):
         h.timeRange = 3600
         h.rateUpdate = 30000
         h.updateIndex = 30000
-    elif beammode in 'testbeam':
+    elif beammode == 'testbeam':
         h.rateBinwidth = 10
         h.timeRange = 200
         h.rateUpdate = 10000
@@ -167,7 +167,7 @@ def updateAllEvents():
     print(f"file = {h.filename}")
     h.updatingFile = True
     while(h.updatingFile):
-        h.myDir = gDirectory.Get('data')
+        h.myDir = h.file.Get("data")
         try: 
             h.eventEnd = h.myDir.GetEntriesFast() - 1
             h.updatingFile = False
@@ -188,7 +188,7 @@ def updateAllEvents():
 ##functions to get board info from json file
 
 def getMultislot(type):
-    f = open("board_mapping_local.json")
+    f = open(h.confName)
     data = json.load(f)
 
     panelName = []
@@ -291,7 +291,7 @@ def getMultislot(type):
 
 def getMultiboard(type):
     #open file
-    f = open("board_mapping_local.json")
+    f = open(h.confName)
     data = json.load(f)
 
     #initialize arrays
