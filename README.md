@@ -32,7 +32,7 @@ The RTDQM is a multi-threaded Python software, with a main script creating and m
 
 
 ## Usage
-This project is meant to be used on ROOT files written by the SND@LHC data acquisition program, either online or stored locally. Each file contains a ROOT tree with up to $10^6$ events. Once the run number is selected, the program will try to read through all the corresponding files (in order).
+This project is meant to be used on ROOT files written by the SND@LHC data acquisition program, either online or stored locally. Each file contains a ROOT tree with up to $10^6$ events. Once the run number is selected, the program will try to read through all the corresponding files (in order). If real SND@LHC data is not available, please read [Run with event simulator](#run-with-event-simulator). 
 
 
 The monitor can be called using  
