@@ -35,11 +35,13 @@ if __name__ == '__main__':
     print(f"Beammode = {beammode} --------------------------",flush=True)
 
     TH1.AddDirectory(False)
-    #h.filedir = f"root://snd-server-1:1094///mnt/raid1/data_online/" #online
+    h.filedir = f"root://snd-server-1:1094///mnt/raid1/data_online/" #online
     #h.filedir = f"/home/sndmon/QtDqmp/Data/"   #local new
     #h.filedir = f"/home/sndmon/Snd/Data/"   #local old
     #h.filedir = f"/home/sndecs/RunData/" #local TB
-    h.filedir = f"./Data/" #local test
+    if beammode=="test":
+        h.filedir = f"./Data/" #local test
+        h.confName = "board_mapping_local.json"
 
     h.filename = h.filedir + f"run_{runNumber}/data_{fileNumber}.root"
 
