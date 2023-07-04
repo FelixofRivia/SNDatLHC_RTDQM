@@ -103,7 +103,7 @@ There are additional modules needed for plotting the luminosity of ATLAS but thi
 If it is not possible to access the real SND@LHC data, a simple event simulator is available to test features of the RTDQM. To run with event simulator
 > user@host $  root simulate.C
 
-Then
+Then (in a different shell or moving the first command to background)
 > user@host $  python3 monitor.py 5408 0 "test"
 
 
