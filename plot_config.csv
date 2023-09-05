@@ -1,0 +1,36 @@
+plot, flag, description
+rate, 1, Global event rate must be always active
+rateSciFi, 0, Scifi hit rate
+rateUS, 0, US hit rate
+rateDS, 0, DS hit rate
+rateBM, 0, Beam Monitor hit rate
+sciFiCh, 0, SciFi hits per channel
+usCh, 0, US hits per channel
+dsCh, 0, DS hits per channel
+bmCh, 0, DS hits per channel
+hitsTot, 0, hits per board of whole detector 
+hitsSciFi, 0, hits per board of SciFi
+hitsUS, 0, hits per board of US
+hitsDS, 0, hits per board of DS 
+hitsBM, 0, hits per board of Beam Monitor
+valUS1, 0, QDC distribution in US1
+valUS2, 0, QDC distribution in US2
+valUS3, 0, QDC distribution in US3
+valUS4, 0, QDC distribution in US4
+valUS5, 0, QDC distribution in US5
+valDS1V, 0, QDC distribution in DS1V
+valDS1L, 0, QDC distribution in DS1V
+valDS1R, 0, QDC distribution in DS1V
+scatValUS1, 0, QDC Correlation between left and right US1 
+scatValUS2, 0, QDC Correlation between left and right US2 
+scatValUS3, 0, QDC Correlation between left and right US3 
+scatValUS4, 0, QDC Correlation between left and right US4
+scatValUS5, 0, QDC Correlation between left and right US5
+scatValUS1R2R, 0, QDC Correlation between US1R and US2R
+scatValUS1L2L, 0, QDC Correlation between US1L and US2L
+scatValUS1R1V, 0, QDC Correlation between US1R and DS1V
+alignUS, 0, Timestamp comparison between US boards
+planeUS, 1, US hits per plane
+planeDS, 0, DS hits per plane
+planeSciFi, 0, SciFi hits per plane
+mapSciFi1, 0, 2D beam spread in SciFi1
