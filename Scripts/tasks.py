@@ -3,7 +3,26 @@ import Scripts.header as h
 import time as t
 import ROOT
 import json
+import csv
 
+def read_csv_file(file_path):
+    """Read the contents of a CSV file and return the data as a list of lists."""
+    with open(file_path, 'r', newline='') as csvfile:
+        csvreader = csv.reader(csvfile)
+        data = [row for row in csvreader]
+    return data
+
+def return_bar(data, tofpet_id, tofpet_channel):    
+    for row in data:
+        if (row[4] == str(tofpet_channel) and row[3] == str(tofpet_id%2)):
+            return int(row[0])
+    return -1
+
+def return_flag(data, plotname):    
+    for row in data:
+        if (row[0] == plotname):
+            return int(row[1])
+    return -1
 
 def updateFileNumber():    # for online data only
     h.fileN += 1
@@ -357,7 +376,7 @@ def getBoardArrays(beammode):
 
 
    # add back 
-    h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
+   # h.vetoId, h.vetoName, h.vetoPName, h.vetoSlot = getMultislot("veto")
     h.sciFiId, h.sciFiName, h.sciFiPName, h.sciFiSlot = getMultiboard("scifi")
     h.usId, h.usName, h.usPName, h.usSlot = getMultislot("us")
     h.dsId, h.dsName, h.dsPName, h.dsSlot = getMultislot("ds")

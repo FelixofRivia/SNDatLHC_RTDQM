@@ -563,3 +563,119 @@ def plotHitsPlaneMB(canvasName, boardId, detName):
                     hHitsPerPlane.Fill(detName[d],1)
                     
         h.iArr[iNext] += 1
+
+###################################################################################
+########################## Plot Hits per Bar #######################
+###################################################################################
+def plotHitsBar(canvasName,boardNumber,tof_Id):
+    
+    chMap = task.read_csv_file("/home/sndmon/QtDqmp/monitoring_test/Scripts/DS_SiPM_mapping.csv")
+
+    hHitsPerChannel = TH1D(f"{canvasName}HitsPerChannel",f"{canvasName} Hits per channel",60,0,60)
+    hHitsPerChannel.GetXaxis().SetTitle("bar number")
+    hHitsPerChannel.GetYaxis().SetTitle("hits")
+    hHitsPerChannel.SetFillColor(38)
+    hitsPerChannel = TCanvas(f"{canvasName}_hits_per_bar",f"{canvasName} hits per bar",600,800)
+    gStyle.SetOptStat("ne")
+
+    eventStart = h.eventStart
+    iupdate = h.updateIndex
+
+    i = eventStart
+    run = True
+    iNext = len(h.iArr)
+    h.iArr.append(i)
+    #loop through all entries
+    while(run):
+        i = h.iArr[iNext]
+        #update
+        if i%iupdate == 0:
+            print(f"{canvasName}_Hits_per_bar number : {i}",flush=True)
+            hHitsPerChannel.Draw("bar hist")
+            # add evt number
+            hHitsPerChannel.SetTitle(f"{canvasName}HitsPerBar: evt {i}")
+            hitsPerChannel.Modified()
+            hitsPerChannel.Update()
+            # save on root file
+            task.wrthisto(hHitsPerChannel, f"{canvasName}_Hits_per_bar")
+
+        if(i >= h.eventEnd):
+            #update
+            hHitsPerChannel.Draw("bar hist")
+            # add evt number
+            hHitsPerChannel.SetTitle(f"{canvasName}HitsPerBar: evt {i}")
+            hitsPerChannel.Modified()
+            hitsPerChannel.Update()
+            # save on root file
+            task.wrthisto(hHitsPerChannel, f"{canvasName}_Hits_per_bar")
+
+            if i == 999999:
+                print(f"{canvasName}_Hits_per_bar event number : 999999. End of file",flush=True)
+                while(h.waitingEnd):
+                    t.sleep(1)
+                i = h.iArr[iNext]
+            #if end of a set range
+            elif h.isSetRange == True:
+                print("end of range. Stopping loop...")
+                exit()
+            
+            
+        # wait for reader 
+        while(h.iRead<=i):
+            t.sleep(5)
+
+        #while sharing a value with rate or another thread
+        read.avoidOverlap(i,iNext)
+
+        while(h.readingTree):
+            t.sleep(.005)
+
+        h.readingTree = True #-------------------------------------------------start flag
+        
+        #load in value. If invalid (<= 0), discard
+        bb = h.myDir.GetEntry(i)
+        if bb <= 0:
+            h.iArr[iNext] += 1
+            h.readingTree = False
+            continue
+        
+        boardID = np.uint8(h.myDir.board_id)
+        #Check if the selected board is hit
+        if boardNumber not in boardID:
+            h.iArr[iNext] += 1
+            h.readingTree = False
+            continue
+
+        tofChannel = np.uint8(h.myDir.tofpet_channel)
+        tofID = np.uint8(h.myDir.tofpet_id)
+        h.readingTree = False #-------------------------------------------------end flag
+
+
+
+
+        # check if array lenght is the same 
+        if len(boardID) != len(tofChannel):
+            print("ERROR: event ",i," len(boardID) != len(tofChannel)", flush=True)
+            h.iArr[iNext] += 1
+            continue
+
+        if len(boardID) != len(tofID):
+            print("ERROR: event ",i," len(boardID) != len(tofID)", flush=True)
+            h.iArr[iNext] += 1
+            continue
+
+        if len(tofID) != len(tofChannel):
+            print("ERROR: event ",i," len(tofID) != len(tofChannel)", flush=True)
+            h.iArr[iNext] += 1
+            continue
+
+
+        for j, bn in enumerate(boardID):
+            if (bn == boardNumber and tofID[j] in tof_Id):
+                ch = task.return_bar(chMap, tofID[j], tofChannel[j])
+                if ch == -1:
+                    h.iArr[iNext] += 1
+                    continue
+                hHitsPerChannel.Fill(ch,1)
+
+        h.iArr[iNext] += 1

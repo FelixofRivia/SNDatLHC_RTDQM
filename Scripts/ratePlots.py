@@ -68,7 +68,7 @@ def plotGlobalEvtRate():
             globalRate.cd(1)
             hRate.Draw("hist")
             globalRate.cd(2)
-            hRateNorm.Draw("e")
+            hRateNorm.Draw("hist")
             # add evt number
             hRate.SetTitle(f"Total Rate: evt {i}")
             hRateNorm.SetTitle(f"Total RateNorm: evt {i}")
