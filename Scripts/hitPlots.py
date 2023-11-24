@@ -569,7 +569,7 @@ def plotHitsPlaneMB(canvasName, boardId, detName):
 ###################################################################################
 def plotHitsBar(canvasName,boardNumber,tof_Id):
     
-    chMap = task.read_csv_file("/home/sndmon/QtDqmp/monitoring_test/Scripts/DS_SiPM_mapping.csv")
+    chMap = task.read_csv_file("./Scripts/DS_SiPM_mapping.csv")
 
     hHitsPerChannel = TH1D(f"{canvasName}HitsPerChannel",f"{canvasName} Hits per channel",60,0,60)
     hHitsPerChannel.GetXaxis().SetTitle("bar number")

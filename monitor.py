@@ -11,7 +11,7 @@ import Scripts.tasks as task
 import Scripts.ratePlots as r
 import Scripts.hitPlots as hit
 import Scripts.hitMaps as map
-import Scripts.luminosity as lum
+#import Scripts.luminosity as lum
 import Scripts.reader as read
 import Scripts.valuePlots as val
 import Scripts.timeAlign as align
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     #define threading functions
     reader = threading.Thread(target=read.readEntry)
     rate = threading.Thread(target=r.plotGlobalEvtRate)
-    lumi = threading.Thread(target=lum.main)
+    #lumi = threading.Thread(target=lum.main)
 
     rateVeto = threading.Thread(target=r.plotDetHitRate, args = ("Veto",h.vetoId))
     rateSciFi = threading.Thread(target=r.plotDetHitRate, args=("Scifi",h.sciFiId))
@@ -117,13 +117,13 @@ if __name__ == '__main__':
     valUS2 = threading.Thread(target=val.plotValueBoardMS, args=("US2",h.usId[0],[0,1,2,3]))
     valUS3 = threading.Thread(target=val.plotValueBoardMS, args=("US3",h.usId[1],[0,1,4,5]))
     valUS4 = threading.Thread(target=val.plotValueBoardMS, args=("US4",h.usId[2],[0,1,2,3]))
-    valUS5 = threading.Thread(target=val.plotValueBoardMS, args=("US5",h.usId[3],[0,1,2,3]))
+    #valUS5 = threading.Thread(target=val.plotValueBoardMS, args=("US5",h.usId[3],[0,1,2,3]))
 
     scatValUS1 = threading.Thread(target=val.plotScatterValue, args=(h.usId[0],h.usId[0],[6,7],[4,5],"US1L","US1R"))
     scatValUS2 = threading.Thread(target=val.plotScatterValue, args=(h.usId[0],h.usId[0],[2,3],[0,1],"US2L","US2R"))
     scatValUS3 = threading.Thread(target=val.plotScatterValue, args=(h.usId[1],h.usId[1],[4,5],[0,1],"US3L","US3R"))
     scatValUS4 = threading.Thread(target=val.plotScatterValue, args=(h.usId[2],h.usId[2],[2,3],[0,1],"US4L","US4R"))
-    scatValUS5 = threading.Thread(target=val.plotScatterValue, args=(h.usId[3],h.usId[3],[2,3],[0,1],"US5L","US5R"))
+    #scatValUS5 = threading.Thread(target=val.plotScatterValue, args=(h.usId[3],h.usId[3],[2,3],[0,1],"US5L","US5R"))
     scatValUS1R2R = threading.Thread(target=val.plotScatterValue, args=(h.usId[0],h.usId[0],[4,5],[0,1],"US1R","US2R"))
     scatValUS1L2L = threading.Thread(target=val.plotScatterValue, args=(h.usId[0],h.usId[0],[6,7],[2,3],"US1L","US2L"))
     scatValUS1R1V = threading.Thread(target=val.plotScatterValue, args=(h.usId[0],h.dsId[0],[4,5],[2,3],"US1R","DS1V"))
